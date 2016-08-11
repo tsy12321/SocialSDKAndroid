@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.tencent.mm.sdk.modelmsg.WXImageObject;
+import com.tencent.mm.sdk.modelmsg.WXMusicObject;
 import com.tencent.mm.sdk.modelmsg.WXTextObject;
+import com.tencent.mm.sdk.modelmsg.WXVideoObject;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.PlatformType;
 import com.tsy.sdk.social.SSOHandler;
@@ -13,7 +15,9 @@ import com.tsy.sdk.social.listener.AuthListener;
 import com.tsy.sdk.social.listener.ShareListener;
 import com.tsy.sdk.social.share_media.IShareMedia;
 import com.tsy.sdk.social.share_media.ShareImageMedia;
+import com.tsy.sdk.social.share_media.ShareMusicMedia;
 import com.tsy.sdk.social.share_media.ShareTextMedia;
+import com.tsy.sdk.social.share_media.ShareVideoMedia;
 import com.tsy.sdk.social.share_media.ShareWebMedia;
 import com.tsy.sdk.social.util.BitmapUtils;
 import com.tsy.sdk.social.util.LogUtils;
@@ -193,6 +197,28 @@ public class WXHandler extends SSOHandler {
             Bitmap thumb = Bitmap.createScaledBitmap(shareImageMedia.getImage(), 200, 200, true);
             msg.thumbData = BitmapUtils.bitmap2Bytes(thumb);
             thumb.recycle();
+        } else if(shareMedia instanceof ShareMusicMedia) {  //音乐分享
+            ShareMusicMedia shareMusicMedia = (ShareMusicMedia) shareMedia;
+            type = "music";
+
+            WXMusicObject musicObject = new WXMusicObject();
+            musicObject.musicUrl = shareMusicMedia.getMusicUrl();
+
+            msg.mediaObject = musicObject;
+            msg.title = shareMusicMedia.getTitle();
+            msg.description = shareMusicMedia.getDescription();
+            msg.thumbData = BitmapUtils.bitmap2Bytes(shareMusicMedia.getThumb());
+        } else if(shareMedia instanceof ShareVideoMedia) {      //视频分享
+            ShareVideoMedia shareVideoMedia = (ShareVideoMedia) shareMedia;
+            type = "video";
+
+            WXVideoObject videoObject = new WXVideoObject();
+            videoObject.videoUrl = shareVideoMedia.getVideoUrl();
+
+            msg.mediaObject = videoObject;
+            msg.title = shareVideoMedia.getTitle();
+            msg.description = shareVideoMedia.getDescription();
+            msg.thumbData = BitmapUtils.bitmap2Bytes(shareVideoMedia.getThumb());
         } else {
             if(this.mShareListener != null) {
                 this.mShareListener.onError(this.mConfig.getName(), "shareMedia error");
@@ -215,7 +241,7 @@ public class WXHandler extends SSOHandler {
         } else if(this.mConfig.getName() == PlatformType.WEIXIN_CIRCLE) {      //分享朋友圈
             req.scene = SendMessageToWX.Req.WXSceneTimeline;
         }
-        
+
         if(!this.mWXApi.sendReq(req)) {
             if(this.mShareListener != null) {
                 this.mShareListener.onError(this.mConfig.getName(), "sendReq fail");
