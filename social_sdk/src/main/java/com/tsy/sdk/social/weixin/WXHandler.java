@@ -1,14 +1,19 @@
 package com.tsy.sdk.social.weixin;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 
+import com.tencent.mm.sdk.modelmsg.WXImageObject;
+import com.tencent.mm.sdk.modelmsg.WXTextObject;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.PlatformType;
 import com.tsy.sdk.social.SSOHandler;
 import com.tsy.sdk.social.listener.AuthListener;
 import com.tsy.sdk.social.listener.ShareListener;
 import com.tsy.sdk.social.share_media.IShareMedia;
+import com.tsy.sdk.social.share_media.ShareImageMedia;
+import com.tsy.sdk.social.share_media.ShareTextMedia;
 import com.tsy.sdk.social.share_media.ShareWebMedia;
 import com.tsy.sdk.social.util.BitmapUtils;
 import com.tsy.sdk.social.util.LogUtils;
@@ -28,6 +33,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import org.json.JSONObject;
 
 /**
+ * 微信处理Handler
  * Created by tsy on 16/8/4.
  */
 public class WXHandler extends SSOHandler {
@@ -89,9 +95,9 @@ public class WXHandler extends SSOHandler {
         SendAuth.Req req1 = new SendAuth.Req();
         req1.scope = sScope;
         req1.state = "none";
-        boolean ret = this.mWXApi.sendReq(req1);
 
-        if(!ret) {
+        if(!this.mWXApi.sendReq(req1)) {
+            this.mAuthListener.onError(this.mConfig.getName(), "sendReq fail");
             LogUtils.e("wxapi sendReq fail");
         }
     }
@@ -147,27 +153,74 @@ public class WXHandler extends SSOHandler {
     public void share(IShareMedia shareMedia, ShareListener shareListener) {
         this.mShareListener = shareListener;
 
+        WXMediaMessage msg = new WXMediaMessage();
+        String type = "";
+
         if(shareMedia instanceof ShareWebMedia) {       //网页分享
             ShareWebMedia shareWebMedia = (ShareWebMedia) shareMedia;
+            type = "webpage";
+
+            //web object
             WXWebpageObject webpageObject = new WXWebpageObject();
             webpageObject.webpageUrl = shareWebMedia.getWebPageUrl();
 
-            WXMediaMessage msg = new WXMediaMessage(webpageObject);
+            msg.mediaObject = webpageObject;
             msg.title = shareWebMedia.getTitle();
             msg.description = shareWebMedia.getDescription();
             msg.thumbData = BitmapUtils.bitmap2Bytes(shareWebMedia.getThumb());
+        } else if(shareMedia instanceof ShareTextMedia) {   //文字分享
+            ShareTextMedia shareTextMedia = (ShareTextMedia) shareMedia;
+            type = "text";
 
-            //构造一个req
-            SendMessageToWX.Req req = new SendMessageToWX.Req();
-            req.transaction = buildTransaction("webpage");
-            req.message = msg;
-            if(this.mConfig.getName() == PlatformType.WEIXIN) {     //分享好友
-                req.scene = SendMessageToWX.Req.WXSceneSession;
-            } else if(this.mConfig.getName() == PlatformType.WEIXIN_CIRCLE) {      //分享朋友圈
-                req.scene = SendMessageToWX.Req.WXSceneTimeline;
+            //text object
+            WXTextObject textObject = new WXTextObject();
+            textObject.text = shareTextMedia.getText();
+
+            msg.mediaObject = textObject;
+            msg.description = shareTextMedia.getText();
+        } else if(shareMedia instanceof ShareImageMedia) {  //图片分享
+            ShareImageMedia shareImageMedia = (ShareImageMedia) shareMedia;
+            type = "image";
+
+            //image object
+            WXImageObject imageObject = new WXImageObject();
+            //image限制10M
+            imageObject.imageData = BitmapUtils.compressBitmap(BitmapUtils.bitmap2Bytes(shareImageMedia.getImage()), 10 * 1024 * 1024);
+
+            msg.mediaObject = imageObject;
+
+            //直接缩放图片
+            Bitmap thumb = Bitmap.createScaledBitmap(shareImageMedia.getImage(), 200, 200, true);
+            msg.thumbData = BitmapUtils.bitmap2Bytes(thumb);
+            thumb.recycle();
+        } else {
+            if(this.mShareListener != null) {
+                this.mShareListener.onError(this.mConfig.getName(), "shareMedia error");
             }
+            return ;
+        }
 
-            mWXApi.sendReq(req);
+        //压缩缩略图到32kb
+        if(msg.thumbData.length > '耀') {        //微信sdk里面判断的大小
+            msg.thumbData = BitmapUtils.compressBitmap(msg.thumbData, '耀');
+        }
+
+        //发起request
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.message = msg;
+        req.transaction = buildTransaction(type);
+
+        if(this.mConfig.getName() == PlatformType.WEIXIN) {     //分享好友
+            req.scene = SendMessageToWX.Req.WXSceneSession;
+        } else if(this.mConfig.getName() == PlatformType.WEIXIN_CIRCLE) {      //分享朋友圈
+            req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        }
+        
+        if(!this.mWXApi.sendReq(req)) {
+            if(this.mShareListener != null) {
+                this.mShareListener.onError(this.mConfig.getName(), "sendReq fail");
+            }
+            LogUtils.e("wxapi sendReq fail");
         }
     }
 

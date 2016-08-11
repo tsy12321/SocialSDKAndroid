@@ -3,7 +3,7 @@ package com.tsy.sdk.social.share_media;
 import android.graphics.Bitmap;
 
 /**
- * 网页分享实体
+ * 网页分享 实体类
  * Created by tsy on 16/8/5.
  */
 public class ShareWebMedia implements IShareMedia {
