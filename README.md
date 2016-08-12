@@ -1,11 +1,21 @@
 # SocialSDKAndroid
 对第三方社会化sdk的集成和二次封装，比如第三方授权登录、第三方分享等
 
-## 1 版本更新
+## 0 版本更新
 
 |版本号|更新内容|
 |---|---|
-|1.0|集成微信授权登录,微信网页分享,朋友圈网页分享|
+|1.0|集成微信授权登录,5种分享媒介,微信会话分享,微信朋友圈分享|
+
+## 1 目录介绍
+
+采用了jar包的方式封装sdk,需要使用时可以引入social_sdk.jar再搭配需要的平台sdk使用.
+这种方式可以减少sdk的体积,需要什么平台就引入哪个平台.更为合理.
+
+- social_sdk/ sdk的开发源码module 开发完成后用gradle中makejar打成jar包
+- social_sdk.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
+- weixin_sdk_v3.1.1.jar 微信sdk
+- SampleCode/ 一个示例代码(非可运行项目)
 
 ## 2 功能介绍
 
@@ -15,35 +25,58 @@
 
 ### 2.2 分享
 
-1. 微信网页分享
-1. 朋友圈网页分享
+#### 2.2.1 分享媒介
 
-### 3 集成说明
+1. 文字
+1. 图片
+1. 音乐
+1. 视频
+1. 网页
 
-将social_sdk目录移到项目中,并在setting.gradle和项目的build.gradle中引用
+#### 2.2.2 分享平台
 
-### 4 开发说明
+1. 微信会话分享
+1. 微信朋友圈分享
 
-#### 4.1 初始化配置
+## 3 开发说明
 
-初始各个平台的配置信息.
+### 3.1 准备
+
+将social_sdk.jar和需要的平台sdk放入项目中引用.
+
+AndroidManifest加上以下基本的权限(之后各个平台会注册一些不同的信息后面会说明)
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+```
+
+### 3.2 配置平台信息
+
+在项目入口(或者在调用前)需要配置平台的信息,配置一次即可.
 
 ```java
 PlatformConfig.setWeixin(WX_APPID, WX_APPSECRET);
 ```
 
-#### 4.2 登录授权
+### 3.3 接口使用说明
 
-先获取ShareApi
+调用方式使用api调用登录或者分享接口,在参数中区别平台,实现回调接收成功 取消或者失败的结果.
+
+示例如下:(某些平台会有一些特殊处理后面会在平台中说明)
+
+初始化api:
 
 ```java
-SocialApi api = SocialApi.get(this);
+SocialApi mSocialApi = SocialApi.get(this);
 ```
 
-调用授权接口,选择授权平台,设置授权回调监听.
-
+登录授权:
 ```java
-api.doOauthVerify(this, PlatformType.WEIXIN, new AuthListener() {
+mSocialApi.doOauthVerify(this, PlatformType.WEIXIN, new AuthListener() {
     @Override
     public void onComplete(PlatformType platform_type, Map<String, String> map) {
         Log.i("tsy", "oncomplete:" + map);
@@ -61,25 +94,98 @@ api.doOauthVerify(this, PlatformType.WEIXIN, new AuthListener() {
 });
 ```
 
-##### 4.2.1 微信登录授权
+分享:
+```java
 
-需要添加指定activity:.wxapi.WXEntryActivity
+//分享媒介 后面有详细介绍
+ShareWebMedia shareMedia = new ShareWebMedia();
+shareMedia.setTitle("分享网页测试");
+shareMedia.setDescription("分享网页测试");
+shareMedia.setWebPageUrl("http://www.baidu.com");
+shareMedia.setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
 
-并在AndroidManfiest注册:
+mSocialApi.doShare(this, PlatformType.WEIXIN, shareMedia, new ShareListener() {
+    @Override
+    public void onComplete(PlatformType platform_type) {
+        Log.i("tsy", "share onComplete");
+    }
 
-```xml
-<activity
-   android:name=".wxapi.WXEntryActivity"
-   android:theme="@android:style/Theme.Translucent.NoTitleBar"
-   android:configChanges="keyboardHidden|orientation|screenSize"
-   android:exported="true"
-   android:screenOrientation="portrait" />
+    @Override
+    public void onError(PlatformType platform_type, String err_msg) {
+        Log.i("tsy", "share onError:" + err_msg);
+    }
+
+    @Override
+    public void onCancel(PlatformType platform_type) {
+        Log.i("tsy", "share onCancel");
+    }
+});
+
 ```
 
-然后WXEntryActivity直接继承WXCallbackActivity类即可
+### 3.4 分享媒介
+
+现在集成了文字分享,图片分享,音乐分享,视频分享,网页分享5种分享媒介.不同的平台可能只有其中某几种.
+
+#### 3.4.1 文字分享
 
 ```java
-import com.ci123.sdk.social.weixin.WXCallbackActivity;
+ShareTextMedia shareMedia = new ShareTextMedia();
+shareMedia.setText("分享文字测试");
+```
+#### 3.4.2 图片分享
+
+```java
+ShareImageMedia shareMedia = new ShareImageMedia();
+shareMedia.setImage(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+```
+
+#### 3.4.3 音乐分享
+
+```java
+ShareMusicMedia shareMedia = new ShareMusicMedia();
+shareMedia.setTitle("分享音乐测试");
+shareMedia.setDescription("分享音乐测试");
+shareMedia.setMusicUrl("http://idg-tangsiyuan.tunnel.nibaguai.com/splash/music.mp3");
+shareMedia.setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+```
+
+#### 3.4.4 视频分享
+
+```java
+ShareVideoMedia shareMedia = new ShareVideoMedia();
+shareMedia.setTitle("分享视频测试");
+shareMedia.setDescription("分享视频测试");
+shareMedia.setVideoUrl("http://idg-tangsiyuan.tunnel.nibaguai.com/splash/music.mp3");
+shareMedia.setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+```
+
+#### 3.4.5 网页分享
+
+```java
+ShareWebMedia shareMedia = new ShareWebMedia();
+shareMedia.setTitle("分享网页测试");
+shareMedia.setDescription("分享网页测试");
+shareMedia.setWebPageUrl("http://www.baidu.com");
+shareMedia.setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+```
+
+## 4 第三方平台接入
+
+### 4.1 微信
+
+#### 4.1.1 集成sdk
+
+将目录中的weixin_sdk_v3.1.1.jar放入项目.
+
+#### 4.1.2 配置
+
+创建固定activity: 包名.wxapi.WXEntryActivity.java
+该activity继承WXCallbackActivity类.
+
+```java
+...
+import com.tsy.sdk.social.weixin.WXCallbackActivity;
 
 /**
  * Created by tsy on 16/8/4.
@@ -87,5 +193,29 @@ import com.ci123.sdk.social.weixin.WXCallbackActivity;
 public class WXEntryActivity extends WXCallbackActivity {
 
 }
-
 ```
+
+AndroidManifest中添加:
+
+```java
+<activity
+    android:name=".wxapi.WXEntryActivity"
+    android:configChanges="keyboardHidden|orientation|screenSize"
+    android:exported="true"
+    android:screenOrientation="portrait"
+    android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+```
+
+#### 4.1.3 常量定义
+
+设置配置信息:
+
+```java
+PlatformConfig.setWeixin(WX_APPID, WX_APPSECRET);
+```
+
+PlatformType:
+
+微信:PlatformType.WEIXIN(可用于登录和微信回话分享)
+
+朋友圈:PlatformType.WEIXIN_CIRCLE(用于微信朋友圈分享)

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="登录授权"
+        android:textSize="18dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnWXLogin"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="微信登录" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#55000000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="分享"
+        android:textSize="18dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="选择分享类型:"
+        android:textSize="16dp"
+        android:textColor="#d5000000"/>
+
+    <RadioGroup
+        android:id="@+id/radioGShareMedia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:orientation="horizontal">
+        <RadioButton android:id="@+id/radioShareText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="文字"
+            android:checked="true"/>
+        <RadioButton android:id="@+id/radioShareImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="图片"/>
+        <RadioButton android:id="@+id/radioShareMusic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="音乐"/>
+        <RadioButton android:id="@+id/radioShareVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="视频"/>
+        <RadioButton android:id="@+id/radioShareWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="网页"/>
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="选择分享平台:"
+        android:textSize="16dp"
+        android:textColor="#d5000000"/>
+
+    <RadioGroup
+        android:id="@+id/radioGSharePlatform"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:orientation="horizontal">
+        <RadioButton android:id="@+id/radioShareWX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="微信"
+            android:checked="true"/>
+        <RadioButton android:id="@+id/radioShareWXCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="朋友圈"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnShare"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:text="分享" />
+</LinearLayout>
