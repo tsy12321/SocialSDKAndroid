@@ -227,7 +227,7 @@ public class WXHandler extends SSOHandler {
         }
 
         //压缩缩略图到32kb
-        if(msg.thumbData.length > '耀') {        //微信sdk里面判断的大小
+        if(msg.thumbData != null && msg.thumbData.length > '耀') {        //微信sdk里面判断的大小
             msg.thumbData = BitmapUtils.compressBitmap(msg.thumbData, '耀');
         }
 
