@@ -1,6 +1,13 @@
 # SocialSDKAndroid
 对第三方社会化sdk的集成和二次封装，比如第三方授权登录、第三方分享等
 
+> 欢迎发issue建议新的功能点和渠道集成
+
+原文阅读:
+
+[http://www.jianshu.com/p/4ec1d9c15763](http://www.jianshu.com/p/4ec1d9c15763)
+
+
 ## 0 版本更新
 
 |版本号|更新内容|
@@ -219,3 +226,11 @@ PlatformType:
 微信:PlatformType.WEIXIN(可用于登录和微信回话分享)
 
 朋友圈:PlatformType.WEIXIN_CIRCLE(用于微信朋友圈分享)
+
+#### 4.1.4 注意
+
+使用微信登录分享需要签名打包，并且签名和包名要和微信平台填入的信息一致。
+
+## 欢迎关注我的公众号
+
+![我的公众号](http://upload-images.jianshu.io/upload_images/1594931-a5b65451c706c2cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
