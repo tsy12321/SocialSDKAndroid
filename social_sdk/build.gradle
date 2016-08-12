@@ -24,3 +24,16 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile files('libs/weixin_sdk_v3.1.1.jar')
 }
+
+task clearJar(type: Delete) {
+    delete 'build/libs/social_sdk.jar'
+}
+
+task makeJar(type: Copy) {
+    from('build/intermediates/bundles/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename ('classes.jar', 'social_sdk.jar')
+}
+
+makeJar.dependsOn(clearJar, build)
