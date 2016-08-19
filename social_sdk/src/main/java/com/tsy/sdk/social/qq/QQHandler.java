@@ -30,6 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
+ * QQ 第三方 Handler
  * Created by tsy on 16/8/18.
  */
 public class QQHandler extends SSOHandler {
@@ -119,7 +120,7 @@ public class QQHandler extends SSOHandler {
 
                 ArrayList<String> path_arr = new ArrayList<>();
                 path_arr.add(path);
-                params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, path_arr);
+                params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, path_arr);  //!这里是大坑 不能用SHARE_TO_QQ_IMAGE_LOCAL_URL
             } else {
                 if(this.mShareListener != null) {
                     this.mShareListener.onError(this.mConfig.getName(), "shareMedia error");
@@ -127,6 +128,7 @@ public class QQHandler extends SSOHandler {
                 return ;
             }
 
+            //qq zone分享
             this.mTencent.shareToQzone(this.mActivity, params, new IUiListener() {
                 @Override
                 public void onComplete(Object o) {
@@ -184,6 +186,7 @@ public class QQHandler extends SSOHandler {
                 return ;
             }
 
+            //qq分享
             mTencent.shareToQQ(mActivity, params, new IUiListener() {
                 @Override
                 public void onComplete(Object o) {
