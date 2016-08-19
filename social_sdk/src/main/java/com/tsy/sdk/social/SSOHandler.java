@@ -35,7 +35,7 @@ public abstract class SSOHandler {
      * @param shareMedia 分享内容
      * @param shareListener 分享回调
      */
-    public void share(IShareMedia shareMedia, ShareListener shareListener) {
+    public void share(Activity activity, IShareMedia shareMedia, ShareListener shareListener) {
 
     }
 

@@ -158,14 +158,15 @@ public class WXHandler extends SSOHandler {
     }
 
     @Override
-    public void share(IShareMedia shareMedia, ShareListener shareListener) {
-        this.mShareListener = shareListener;
-
+    public void share(Activity activity, IShareMedia shareMedia, ShareListener shareListener) {
         if(!isInstall()) {
             this.mAuthListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.e("wx not install");
             return ;
         }
+
+        this.mActivtiy = activity;
+        this.mShareListener = shareListener;
 
         WXMediaMessage msg = new WXMediaMessage();
         String type = "";

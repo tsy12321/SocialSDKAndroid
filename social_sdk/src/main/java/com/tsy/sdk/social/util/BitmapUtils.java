@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -11,6 +13,33 @@ import java.io.IOException;
  * Created by tsy on 16/8/5.
  */
 public class BitmapUtils {
+
+    /**
+     * Bitmap保存为文件
+     * @param bitmap
+     * @param path
+     * @return
+     */
+    public static File saveBitmapFile(Bitmap bitmap, String path) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(path);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return new File(path);
+    }
 
     /**
      * Bitmap 转 bytes

@@ -86,10 +86,10 @@ public class SocialApi {
      * @param shareMedia
      * @param shareListener
      */
-    public void doShare(PlatformType platformType, IShareMedia shareMedia, ShareListener shareListener) {
+    public void doShare(Activity activity, PlatformType platformType, IShareMedia shareMedia, ShareListener shareListener) {
         SSOHandler ssoHandler = getSSOHandler(platformType);
         ssoHandler.onCreate(mContext, PlatformConfig.getPlatformConfig(platformType));
-        ssoHandler.share(shareMedia, shareListener);
+        ssoHandler.share(activity, shareMedia, shareListener);
     }
 
     /**
