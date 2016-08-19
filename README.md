@@ -13,6 +13,7 @@
 |版本号|更新内容|
 |---|---|
 |1.0|集成微信授权登录,5种分享媒介,微信会话分享,微信朋友圈分享|
+|1.1|集成QQ授权登录,QQ分享,QQ空间分享|
 
 ## 1 目录介绍
 
@@ -22,6 +23,8 @@
 - social_sdk/ sdk的开发源码module 开发完成后用gradle中makejar打成jar包
 - social_sdk.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
 - weixin_sdk_v3.1.1.jar 微信sdk
+- qq_mta-sdk-1.6.2.jar qq sdk
+- qq_sdk_v3.1.0.jar qq sdk
 - SampleCode/ 一个示例代码(非可运行项目)
 
 ## 2 功能介绍
@@ -29,6 +32,7 @@
 ### 2.1 授权登录
 
 1. 微信授权登录
+2. QQ授权登录
 
 ### 2.2 分享
 
@@ -44,6 +48,8 @@
 
 1. 微信会话分享
 1. 微信朋友圈分享
+1. QQ分享
+1. QQ空间分享
 
 ## 3 开发说明
 
@@ -78,7 +84,7 @@ PlatformConfig.setWeixin(WX_APPID, WX_APPSECRET);
 初始化api:
 
 ```java
-SocialApi mSocialApi = SocialApi.get(this);
+SocialApi mSocialApi = SocialApi.get(getApplicationContext());
 ```
 
 登录授权:
@@ -230,6 +236,54 @@ PlatformType:
 #### 4.1.4 注意
 
 使用微信登录分享需要签名打包，并且签名和包名要和微信平台填入的信息一致。
+
+
+### 4.2 QQ
+
+#### 4.2.1 集成sdk
+
+将目录中的qq_mta-sdk-1.6.2.jar和qq_sdk_v3.1.0.jar放入项目.
+
+#### 4.2.2 配置
+
+AndroidManifest中添加:
+
+```java
+<!--qq-->
+<activity
+    android:name="com.tencent.tauth.AuthActivity"
+    android:noHistory="true"
+    android:launchMode="singleTask" >
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="tencent你的appid" />
+    </intent-filter>
+</activity>
+<activity
+    android:name="com.tencent.connect.common.AssistActivity"
+    android:screenOrientation="portrait"
+    android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+```
+
+#### 4.2.3 常量定义
+
+设置配置信息:
+
+```java
+PlatformConfig.setQQ(QQ_APPID);
+```
+
+PlatformType:
+
+微信:PlatformType.QQ(可用于登录和QQ分享)
+
+朋友圈:PlatformType.QZONE(用于qq控件分享)
+
+#### 4.2.4 注意
+
+使用QQ登录需要签名打包，并且签名和包名要和QQ开放平台填入的信息一致。
 
 ## 欢迎关注我的公众号
 

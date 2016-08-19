@@ -24,6 +24,15 @@
             android:layout_marginTop="10dp"
             android:text="微信登录" />
 
+        <Button
+            android:id="@+id/btnQQLogin"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/btnWXLogin"
+            android:text="QQ登录" />
+
     </RelativeLayout>
 
     <View
@@ -107,6 +116,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="朋友圈"/>
+        <RadioButton android:id="@+id/radioShareQQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QQ"/>
+        <RadioButton android:id="@+id/radioShareQZone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QQ空间"/>
     </RadioGroup>
 
     <Button

@@ -9,6 +9,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String WX_APPID = "";    //申请的wx appid
     private static final String WX_APPSECRET = "";      //申请的wx appsecret
+    private static final String QQ_APPID = "";    //申请的qq appid
 
     private SocialApi mSocialApi;
 
@@ -19,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         PlatformConfig.setWeixin(WX_APPID, WX_APPSECRET);
-        mSocialApi = SocialApi.get(this);
+        PlatformConfig.setQQ(QQ_APPID);
+        mSocialApi = SocialApi.get(getApplicationContext());
     }
 
     /**
@@ -27,9 +29,30 @@ public class MainActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btnWXLogin)
     public void onWXLogin() {
-        PlatformConfig.setWeixin(WX_APPID, WX_APPSECRET);
-        SocialApi api = SocialApi.get(this);
-        api.doOauthVerify(this, PlatformType.WEIXIN, new AuthListener() {
+        mSocialApi.doOauthVerify(this, PlatformType.WEIXIN, new AuthListener() {
+            @Override
+            public void onComplete(PlatformType platform_type, Map<String, String> map) {
+                Log.i("tsy", "login onComplete:" + map);
+            }
+
+            @Override
+            public void onError(PlatformType platform_type, String err_msg) {
+                Log.i("tsy", "login onError:" + err_msg);
+            }
+
+            @Override
+            public void onCancel(PlatformType platform_type) {
+                Log.i("tsy", "login onCancel");
+            }
+        });
+    }
+
+    /**
+     * qq登录
+     */
+    @OnClick(R.id.btnQQLogin)
+    public void onQQLogin() {
+        mSocialApi.doOauthVerify(this, PlatformType.QQ, new AuthListener() {
             @Override
             public void onComplete(PlatformType platform_type, Map<String, String> map) {
                 Log.i("tsy", "login onComplete:" + map);
@@ -93,11 +116,19 @@ public class MainActivity extends AppCompatActivity {
         //分享渠道
         switch (radioGSharePlatform.getCheckedRadioButtonId()) {
             case R.id.radioShareWX:
-                doShareWX(shareMedia);
+                mSocialApi.doShare(this, PlatformType.WEIXIN, shareMedia, new MyShareListener());
                 break;
 
             case R.id.radioShareWXCircle:
-                doShareWXCircle(shareMedia);
+                mSocialApi.doShare(this, PlatformType.WEIXIN_CIRCLE, shareMedia, new MyShareListener());
+                break;
+
+            case R.id.radioShareQQ:
+                mSocialApi.doShare(this, PlatformType.QQ, shareMedia, new MyShareListener());
+                break;
+
+            case R.id.radioShareQZone:
+                mSocialApi.doShare(this, PlatformType.QZONE, shareMedia, new MyShareListener());
                 break;
 
             default:
@@ -105,43 +136,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //微信分享
-    public void doShareWX(IShareMedia shareMedia) {
-        mSocialApi.doShare(this, PlatformType.WEIXIN, shareMedia, new ShareListener() {
-            @Override
-            public void onComplete(PlatformType platform_type) {
-                Log.i("tsy", "share onComplete");
-            }
+    public class MyShareListener implements ShareListener {
 
-            @Override
-            public void onError(PlatformType platform_type, String err_msg) {
-                Log.i("tsy", "share onError:" + err_msg);
-            }
+        @Override
+        public void onComplete(PlatformType platform_type) {
+            Log.i("tsy", "share onComplete");
+        }
 
-            @Override
-            public void onCancel(PlatformType platform_type) {
-                Log.i("tsy", "share onCancel");
-            }
-        });
+        @Override
+        public void onError(PlatformType platform_type, String err_msg) {
+            Log.i("tsy", "share onError:" + err_msg);
+        }
+
+        @Override
+        public void onCancel(PlatformType platform_type) {
+            Log.i("tsy", "share onCancel");
+        }
     }
 
-    //朋友圈分享
-    public void doShareWXCircle(IShareMedia shareMedia) {
-        mSocialApi.doShare(this, PlatformType.WEIXIN_CIRCLE, shareMedia, new ShareListener() {
-            @Override
-            public void onComplete(PlatformType platform_type) {
-                Log.i("tsy", "share onComplete");
-            }
-
-            @Override
-            public void onError(PlatformType platform_type, String err_msg) {
-                Log.i("tsy", "share onError:" + err_msg);
-            }
-
-            @Override
-            public void onCancel(PlatformType platform_type) {
-                Log.i("tsy", "share onCancel");
-            }
-        });
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mSocialApi.onActivityResult(requestCode, resultCode, data);
     }
 }
