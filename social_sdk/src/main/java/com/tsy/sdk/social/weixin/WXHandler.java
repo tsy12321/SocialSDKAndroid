@@ -1,5 +1,6 @@
 package com.tsy.sdk.social.weixin;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 public class WXHandler extends SSOHandler {
 
     private Context mContext;
+    private Activity mActivtiy;
 
     private IWXAPI mWXApi;
     private static String sScope = "snsapi_userinfo,snsapi_friend,snsapi_message";
@@ -78,7 +80,7 @@ public class WXHandler extends SSOHandler {
         this.mContext = context;
         this.mConfig = (PlatformConfig.Weixin) config;
 
-        this.mWXApi = WXAPIFactory.createWXAPI(context.getApplicationContext(), this.mConfig.appId);
+        this.mWXApi = WXAPIFactory.createWXAPI(mContext.getApplicationContext(), this.mConfig.appId);
         this.mWXApi.registerApp(this.mConfig.appId);
     }
 
@@ -88,12 +90,14 @@ public class WXHandler extends SSOHandler {
     }
 
     @Override
-    public void authorize(AuthListener authListener) {
+    public void authorize(Activity activity, AuthListener authListener) {
         if(!isInstall()) {
+            this.mAuthListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.e("wx not install");
             return ;
         }
 
+        this.mActivtiy = activity;
         this.mAuthListener = authListener;
 
         SendAuth.Req req1 = new SendAuth.Req();
@@ -156,6 +160,12 @@ public class WXHandler extends SSOHandler {
     @Override
     public void share(IShareMedia shareMedia, ShareListener shareListener) {
         this.mShareListener = shareListener;
+
+        if(!isInstall()) {
+            this.mAuthListener.onError(this.mConfig.getName(), "wx not install");
+            LogUtils.e("wx not install");
+            return ;
+        }
 
         WXMediaMessage msg = new WXMediaMessage();
         String type = "";

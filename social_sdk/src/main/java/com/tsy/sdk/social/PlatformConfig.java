@@ -1,7 +1,5 @@
 package com.tsy.sdk.social;
 
-import android.text.TextUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,11 +14,12 @@ public class PlatformConfig {
     static {
         configs.put(PlatformType.WEIXIN, new PlatformConfig.Weixin(PlatformType.WEIXIN));
         configs.put(PlatformType.WEIXIN_CIRCLE, new PlatformConfig.Weixin(PlatformType.WEIXIN_CIRCLE));
+        configs.put(PlatformType.QQ, new PlatformConfig.QQ(PlatformType.QQ));
+        configs.put(PlatformType.QZONE, new PlatformConfig.QQ(PlatformType.QZONE));
     }
 
     public interface Platform {
         PlatformType getName();
-        boolean isConfigured();
     }
 
     //微信
@@ -33,12 +32,8 @@ public class PlatformConfig {
             return this.media;
         }
 
-        public Weixin(PlatformType var1) {
-            this.media = var1;
-        }
-
-        public boolean isConfigured() {
-            return !TextUtils.isEmpty(this.appId) && !TextUtils.isEmpty(this.appSecret);
+        public Weixin(PlatformType type) {
+            this.media = type;
         }
     }
 
@@ -55,6 +50,32 @@ public class PlatformConfig {
         PlatformConfig.Weixin weixin_circle = (PlatformConfig.Weixin)configs.get(PlatformType.WEIXIN_CIRCLE);
         weixin_circle.appId = appId;
         weixin_circle.appSecret = appSecret;
+    }
+
+    //qq
+    public static class QQ implements PlatformConfig.Platform {
+        private final PlatformType media;
+        public String appId = null;
+
+        public PlatformType getName() {
+            return this.media;
+        }
+
+        public QQ(PlatformType type) {
+            this.media = type;
+        }
+    }
+
+    /**
+     * 设置qq配置信息
+     * @param appId
+     */
+    public static void setQQ(String appId) {
+        PlatformConfig.QQ qq = (PlatformConfig.QQ)configs.get(PlatformType.QQ);
+        qq.appId = appId;
+
+        PlatformConfig.QQ qzone = (PlatformConfig.QQ)configs.get(PlatformType.QZONE);
+        qzone.appId = appId;
     }
 
     public static Platform getPlatformConfig(PlatformType platformType) {

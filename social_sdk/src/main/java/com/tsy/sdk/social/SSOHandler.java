@@ -1,6 +1,8 @@
 package com.tsy.sdk.social;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.tsy.sdk.social.listener.AuthListener;
 import com.tsy.sdk.social.listener.ShareListener;
@@ -13,7 +15,6 @@ public abstract class SSOHandler {
 
     /**
      * 初始化
-     * @param context
      * @param config 配置信息
      */
     public void onCreate(Context context, PlatformConfig.Platform config) {
@@ -22,9 +23,10 @@ public abstract class SSOHandler {
 
     /**
      * 登录授权
+     * @param activity
      * @param authListener 授权回调
      */
-    public void authorize(AuthListener authListener) {
+    public void authorize(Activity activity, AuthListener authListener) {
 
     }
 
@@ -34,6 +36,16 @@ public abstract class SSOHandler {
      * @param shareListener 分享回调
      */
     public void share(IShareMedia shareMedia, ShareListener shareListener) {
+
+    }
+
+    /**
+     * 重写onActivityResult
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 

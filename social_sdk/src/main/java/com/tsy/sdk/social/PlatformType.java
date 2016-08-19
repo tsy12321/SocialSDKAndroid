@@ -5,5 +5,7 @@ package com.tsy.sdk.social;
  */
 public enum PlatformType {
     WEIXIN,
-    WEIXIN_CIRCLE;
+    WEIXIN_CIRCLE,
+    QQ,
+    QZONE;
 }

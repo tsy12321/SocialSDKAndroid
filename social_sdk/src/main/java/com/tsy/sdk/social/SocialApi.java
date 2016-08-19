@@ -1,9 +1,12 @@
 package com.tsy.sdk.social;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.tsy.sdk.social.listener.AuthListener;
 import com.tsy.sdk.social.listener.ShareListener;
+import com.tsy.sdk.social.qq.QQHandler;
 import com.tsy.sdk.social.share_media.IShareMedia;
 import com.tsy.sdk.social.weixin.WXHandler;
 
@@ -21,12 +24,15 @@ public class SocialApi {
 
     private final Map<PlatformType, SSOHandler> mMapSSOHandler = new HashMap();
 
-
     private SocialApi(Context context) {
         mContext = context;
-
     }
 
+    /**
+     * 获取单例
+     * @param context 建议传入全局context
+     * @return
+     */
     public static SocialApi get(Context context) {
         if(mApi == null) {
             mApi = new SocialApi(context);
@@ -46,6 +52,14 @@ public class SocialApi {
                     mMapSSOHandler.put(platformType, new WXHandler());
                     break;
 
+                case QQ:
+                    mMapSSOHandler.put(platformType, new QQHandler());
+                    break;
+
+                case QZONE:
+                    mMapSSOHandler.put(platformType, new QQHandler());
+                    break;
+
                 default:
                     break;
             }
@@ -56,26 +70,37 @@ public class SocialApi {
 
     /**
      * 第三方登录授权
-     * @param context
+     * @param activity
      * @param platformType 第三方平台
      * @param authListener 授权回调
      */
-    public void doOauthVerify(Context context, PlatformType platformType, AuthListener authListener) {
+    public void doOauthVerify(Activity activity, PlatformType platformType, AuthListener authListener) {
         SSOHandler ssoHandler = getSSOHandler(platformType);
-        ssoHandler.onCreate(context, PlatformConfig.getPlatformConfig(platformType));
-        ssoHandler.authorize(authListener);
+        ssoHandler.onCreate(mContext, PlatformConfig.getPlatformConfig(platformType));
+        ssoHandler.authorize(activity, authListener);
     }
 
     /**
      * 分享
-     * @param context
      * @param platformType
      * @param shareMedia
      * @param shareListener
      */
-    public void doShare(Context context, PlatformType platformType, IShareMedia shareMedia, ShareListener shareListener) {
+    public void doShare(PlatformType platformType, IShareMedia shareMedia, ShareListener shareListener) {
         SSOHandler ssoHandler = getSSOHandler(platformType);
-        ssoHandler.onCreate(context, PlatformConfig.getPlatformConfig(platformType));
+        ssoHandler.onCreate(mContext, PlatformConfig.getPlatformConfig(platformType));
         ssoHandler.share(shareMedia, shareListener);
+    }
+
+    /**
+     * actvitiy result
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (Map.Entry<PlatformType, SSOHandler> entry : mMapSSOHandler.entrySet()) {
+            entry.getValue().onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

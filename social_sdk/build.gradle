@@ -19,10 +19,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile files('libs/weixin_sdk_v3.1.1.jar')
+    compile files('libs/qq_sdk_v3.1.0.jar')
+    compile files('libs/qq_mta-sdk-1.6.2.jar')
 }
 
 task clearJar(type: Delete) {
