@@ -14,6 +14,7 @@
 |---|---|
 |1.0|集成微信授权登录,5种分享媒介,微信会话分享,微信朋友圈分享|
 |1.1|集成QQ授权登录,QQ分享,QQ空间分享|
+|1.2|将微信appsecret移除,客户端不放appsecret|
 
 ## 1 目录介绍
 
@@ -72,7 +73,7 @@ AndroidManifest加上以下基本的权限(之后各个平台会注册一些不�
 在项目入口(或者在调用前)需要配置平台的信息,配置一次即可.
 
 ```java
-PlatformConfig.setWeixin(WX_APPID, WX_APPSECRET);
+PlatformConfig.setWeixin(WX_APPID);
 ```
 
 ### 3.3 接口使用说明
@@ -224,7 +225,7 @@ AndroidManifest中添加:
 设置配置信息:
 
 ```java
-PlatformConfig.setWeixin(WX_APPID, WX_APPSECRET);
+PlatformConfig.setWeixin(WX_APPID);
 ```
 
 PlatformType:

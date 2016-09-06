@@ -26,7 +26,6 @@ public class PlatformConfig {
     public static class Weixin implements PlatformConfig.Platform {
         private final PlatformType media;
         public String appId = null;
-        public String appSecret = null;
 
         public PlatformType getName() {
             return this.media;
@@ -40,16 +39,13 @@ public class PlatformConfig {
     /**
      * 设置微信配置信息
      * @param appId
-     * @param appSecret
      */
-    public static void setWeixin(String appId, String appSecret) {
+    public static void setWeixin(String appId) {
         PlatformConfig.Weixin weixin = (PlatformConfig.Weixin)configs.get(PlatformType.WEIXIN);
         weixin.appId = appId;
-        weixin.appSecret = appSecret;
 
         PlatformConfig.Weixin weixin_circle = (PlatformConfig.Weixin)configs.get(PlatformType.WEIXIN_CIRCLE);
         weixin_circle.appId = appId;
-        weixin_circle.appSecret = appSecret;
     }
 
     //qq

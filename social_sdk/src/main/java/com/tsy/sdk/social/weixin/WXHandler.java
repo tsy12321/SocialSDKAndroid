@@ -5,37 +5,36 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
-import com.tsy.sdk.social.share_media.ShareImageMedia;
-import com.tsy.sdk.social.util.LogUtils;
+import com.tencent.mm.sdk.constants.ConstantsAPI;
+import com.tencent.mm.sdk.modelbase.BaseReq;
+import com.tencent.mm.sdk.modelbase.BaseResp;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXImageObject;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXMusicObject;
 import com.tencent.mm.sdk.modelmsg.WXTextObject;
 import com.tencent.mm.sdk.modelmsg.WXVideoObject;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.PlatformType;
 import com.tsy.sdk.social.SSOHandler;
 import com.tsy.sdk.social.listener.AuthListener;
 import com.tsy.sdk.social.listener.ShareListener;
 import com.tsy.sdk.social.share_media.IShareMedia;
+import com.tsy.sdk.social.share_media.ShareImageMedia;
 import com.tsy.sdk.social.share_media.ShareMusicMedia;
 import com.tsy.sdk.social.share_media.ShareTextMedia;
 import com.tsy.sdk.social.share_media.ShareVideoMedia;
 import com.tsy.sdk.social.share_media.ShareWebMedia;
 import com.tsy.sdk.social.util.BitmapUtils;
-import com.tsy.sdk.social.util.NetUtils;
-import com.tsy.sdk.social.util.Utils;
-import com.tencent.mm.sdk.constants.ConstantsAPI;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tsy.sdk.social.util.LogUtils;
 
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信处理Handler
@@ -114,7 +113,9 @@ public class WXHandler extends SSOHandler {
     protected void onAuthCallback(SendAuth.Resp resp) {
         switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK:       //授权成功
-                getAuthWithCode(resp.code);
+                Map<String, String> data = new HashMap<String, String>();
+                data.put("code", resp.code);
+                this.mAuthListener.onComplete(PlatformType.WEIXIN, data);
                 break;
 
             case BaseResp.ErrCode.ERR_USER_CANCEL:      //授权取消
@@ -130,31 +131,6 @@ public class WXHandler extends SSOHandler {
                 }
                 break;
         }
-    }
-
-    private void getAuthWithCode(String code) {
-        StringBuilder authURL = new StringBuilder();
-        authURL.append("https://api.weixin.qq.com/sns/oauth2/access_token?");
-        authURL.append("appid=").append(this.mConfig.appId);
-        authURL.append("&secret=").append(this.mConfig.appSecret);
-        authURL.append("&code=").append(code);
-        authURL.append("&grant_type=authorization_code");
-
-        NetUtils.doGet(authURL.toString(), new NetUtils.HttpResponseCallBack() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                if(WXHandler.this.mAuthListener != null) {
-                    WXHandler.this.mAuthListener.onComplete(PlatformType.WEIXIN, Utils.jsonToMap(response));
-                }
-            }
-
-            @Override
-            public void onFailure() {
-                if(WXHandler.this.mAuthListener != null) {
-                    WXHandler.this.mAuthListener.onError(PlatformType.WEIXIN, "weixin getAuthWithCode err");
-                }
-            }
-        });
     }
 
     @Override
