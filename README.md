@@ -15,6 +15,7 @@
 |1.0|集成微信授权登录,5种分享媒介,微信会话分享,微信朋友圈分享|
 |1.1|集成QQ授权登录,QQ分享,QQ空间分享|
 |1.2|将微信appsecret移除,客户端不放appsecret|
+|1.3|增加新浪微博授权登录和分享|
 
 ## 1 目录介绍
 
@@ -23,9 +24,9 @@
 
 - social_sdk/ sdk的开发源码module 开发完成后用gradle中makejar打成jar包
 - social_sdk.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
-- weixin_sdk_v3.1.1.jar 微信sdk
-- qq_mta-sdk-1.6.2.jar qq sdk
-- qq_sdk_v3.1.0.jar qq sdk
+- weixin_sdk/ 微信sdk
+- qq_sdk/ qq sdk
+- sina_weibo_sdk/ 新浪微博 sdk
 - SampleCode/ 一个示例代码(非可运行项目)
 
 ## 2 功能介绍
@@ -34,6 +35,7 @@
 
 1. 微信授权登录
 2. QQ授权登录
+3. 新浪微博授权登录
 
 ### 2.2 分享
 
@@ -51,6 +53,7 @@
 1. 微信朋友圈分享
 1. QQ分享
 1. QQ空间分享
+1. 新浪微博分享
 
 ## 3 开发说明
 
@@ -74,6 +77,8 @@ AndroidManifest加上以下基本的权限(之后各个平台会注册一些不�
 
 ```java
 PlatformConfig.setWeixin(WX_APPID);
+PlatformConfig.setQQ(QQ_APPID);
+PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 ```
 
 ### 3.3 接口使用说明
@@ -285,6 +290,99 @@ PlatformType:
 #### 4.2.4 注意
 
 使用QQ登录需要签名打包，并且签名和包名要和QQ开放平台填入的信息一致。
+
+### 4.3 新浪微博
+
+#### 4.1.1 集成sdk
+
+将目录中的weiboSDKCore_3.1.4.jar放入项目.
+
+将所有so文件统一放到项目的目录app/jniLibs中(和libs同级), 然后在gradle中加上
+
+```
+android {
+
+    ...
+
+    //引入微博的所有so库
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['jniLibs']
+        }
+    }
+}
+```
+
+#### 4.1.2 配置
+
+AndroidManifest中添加:
+
+```java
+<activity
+    android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+    android:configChanges="keyboardHidden|orientation"
+    android:exported="false"
+    android:windowSoftInputMode="adjustResize"></activity>
+```
+
+并且在发起分享的activity页面的AndroidManifest页面中加上
+
+```java
+<activity android:name="com.tsy.girl.MainActivity">     <!--发起分享的页面-->
+    <intent-filter>
+        <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+        <category android:name="android.intent.category.DEFAULT" />
+    </intent-filter>
+</activity>
+```
+
+然后在发起分享的Activity中添加以下代码.(假如是MainActivity)
+
+实现IWeiboHandler.Response接口, 然后在实现的方法中写:
+
+```java
+@Override
+public void onResponse(BaseResponse baseResponse) {
+    ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onResponse(baseResponse);
+}
+```
+
+实现onNewIntent和onActivityResult方法:
+
+```java
+@Override
+protected void onNewIntent(Intent intent) {
+    ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onNewIntent(intent, this);
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    mSocialApi.onActivityResult(requestCode, resultCode, data);
+}
+
+```
+
+在onCreate中添加以下:
+
+```java
+if (savedInstanceState != null) {
+    ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onNewIntent(getIntent(), this);
+}
+```
+
+然后正常发起授权或者分享代码即可.
+
+#### 4.1.3 常量定义
+
+设置配置信息:
+
+```java
+PlatformConfig.setSinaWB(SINA_WB_APPKEY);
+```
+
+#### 4.1.4 注意
+
+使用新浪登录分享需要签名打包，并且签名和包名要和新浪平台填入的信息一致。
 
 ## 欢迎关注我的公众号
 
