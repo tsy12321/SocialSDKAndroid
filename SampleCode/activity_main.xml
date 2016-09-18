@@ -33,6 +33,14 @@
             android:layout_toRightOf="@+id/btnWXLogin"
             android:text="QQ登录" />
 
+        <Button
+            android:id="@+id/btnSinaWBLogin"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/btnQQLogin"
+            android:text="微博登录" />
     </RelativeLayout>
 
     <View
@@ -124,6 +132,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="QQ空间"/>
+        <RadioButton android:id="@+id/radioShareSinaWB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="微博"/>
     </RadioGroup>
 
     <Button

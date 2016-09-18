@@ -8,6 +8,7 @@ import com.tsy.sdk.social.listener.AuthListener;
 import com.tsy.sdk.social.listener.ShareListener;
 import com.tsy.sdk.social.qq.QQHandler;
 import com.tsy.sdk.social.share_media.IShareMedia;
+import com.tsy.sdk.social.sina.SinaWBHandler;
 import com.tsy.sdk.social.weixin.WXHandler;
 
 import java.util.HashMap;
@@ -60,6 +61,9 @@ public class SocialApi {
                     mMapSSOHandler.put(platformType, new QQHandler());
                     break;
 
+                case SINA_WB:
+                    mMapSSOHandler.put(platformType, new SinaWBHandler());
+                    break;
                 default:
                     break;
             }

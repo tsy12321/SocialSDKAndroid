@@ -16,6 +16,7 @@ public class PlatformConfig {
         configs.put(PlatformType.WEIXIN_CIRCLE, new PlatformConfig.Weixin(PlatformType.WEIXIN_CIRCLE));
         configs.put(PlatformType.QQ, new PlatformConfig.QQ(PlatformType.QQ));
         configs.put(PlatformType.QZONE, new PlatformConfig.QQ(PlatformType.QZONE));
+        configs.put(PlatformType.SINA_WB, new PlatformConfig.SinaWB(PlatformType.SINA_WB));
     }
 
     public interface Platform {
@@ -72,6 +73,29 @@ public class PlatformConfig {
 
         PlatformConfig.QQ qzone = (PlatformConfig.QQ)configs.get(PlatformType.QZONE);
         qzone.appId = appId;
+    }
+
+    //qq
+    public static class SinaWB implements PlatformConfig.Platform {
+        private final PlatformType media;
+        public String appKey = null;
+
+        public PlatformType getName() {
+            return this.media;
+        }
+
+        public SinaWB(PlatformType type) {
+            this.media = type;
+        }
+    }
+
+    /**
+     * 设置新浪微博配置信息
+     * @param appKey
+     */
+    public static void setSinaWB(String appKey) {
+        PlatformConfig.SinaWB sinaWB = (PlatformConfig.SinaWB)configs.get(PlatformType.SINA_WB);
+        sinaWB.appKey = appKey;
     }
 
     public static Platform getPlatformConfig(PlatformType platformType) {

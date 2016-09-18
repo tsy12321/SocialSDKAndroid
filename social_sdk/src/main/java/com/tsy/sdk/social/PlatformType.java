@@ -7,5 +7,6 @@ public enum PlatformType {
     WEIXIN,
     WEIXIN_CIRCLE,
     QQ,
-    QZONE;
+    QZONE,
+    SINA_WB;
 }
