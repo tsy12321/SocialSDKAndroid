@@ -293,7 +293,7 @@ PlatformType:
 
 ### 4.3 新浪微博
 
-#### 4.1.1 集成sdk
+#### 4.3.1 集成sdk
 
 将目录中的weiboSDKCore_3.1.4.jar放入项目.
 
@@ -313,7 +313,7 @@ android {
 }
 ```
 
-#### 4.1.2 配置
+#### 4.3.2 配置
 
 AndroidManifest中添加:
 
@@ -372,7 +372,7 @@ if (savedInstanceState != null) {
 
 然后正常发起授权或者分享代码即可.
 
-#### 4.1.3 常量定义
+#### 4.3.3 常量定义
 
 设置配置信息:
 
@@ -380,7 +380,7 @@ if (savedInstanceState != null) {
 PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 ```
 
-#### 4.1.4 注意
+#### 4.3.4 注意
 
 使用新浪登录分享需要签名打包，并且签名和包名要和新浪平台填入的信息一致。
 
