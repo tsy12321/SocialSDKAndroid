@@ -16,6 +16,7 @@
 |1.1|集成QQ授权登录,QQ分享,QQ空间分享|
 |1.2|将微信appsecret移除,客户端不放appsecret|
 |1.3|增加新浪微博授权登录和分享|
+|1.4|增加可选的Api调用|
 
 ## 1 目录介绍
 
@@ -54,6 +55,38 @@
 1. QQ分享
 1. QQ空间分享
 1. 新浪微博分享
+
+### 2.3 API调用
+
+当第三方授权成功后获取到access_token，会提供一些API查询用户信息，刷新access_token等。现在逐步开始封装API，方便使用。
+
+#### 2.3.1 微信API (WXApi)
+
+1. getAccessToken(String wxAppId, String wxAppSecret,
+                                      String code,
+                                      final Callback callback)
+
+   ```java
+	/**
+	 * 获取access_token
+	 * @param wxAppId wx appid
+	 * @param wxAppSecret wx appsecret
+	 * @param code 调用微信登录获取的code
+	 * @param callback
+	 */
+   ```
+   
+1. getUserInfo(String openid, String access_token,
+                                   final Callback callback)
+                                   
+   ```java
+   /**
+     * 获取用户信息
+     * @param openid openid
+     * @param access_token access_token
+     * @param callback
+     */
+   ```
 
 ## 3 开发说明
 
