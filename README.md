@@ -324,6 +324,19 @@ PlatformType:
 
 使用QQ登录需要签名打包，并且签名和包名要和QQ开放平台填入的信息一致。
 
+#### 4.2.5 回调设置
+
+要在onActivityResult添加以下
+
+```java
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    mSocialApi.onActivityResult(requestCode, resultCode, data);
+}
+```
+
 ### 4.3 新浪微博
 
 #### 4.3.1 集成sdk
@@ -416,6 +429,7 @@ PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 #### 4.3.4 注意
 
 使用新浪登录分享需要签名打包，并且签名和包名要和新浪平台填入的信息一致。
+
 
 ## 欢迎关注我的公众号
 
