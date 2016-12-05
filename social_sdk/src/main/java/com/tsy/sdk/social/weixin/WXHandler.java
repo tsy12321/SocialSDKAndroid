@@ -90,6 +90,11 @@ public class WXHandler extends SSOHandler {
 
     @Override
     public void authorize(Activity activity, AuthListener authListener) {
+        authorize(activity, "none", sScope, authListener);
+    }
+
+    @Override
+    public void authorize(Activity activity, String scope, String state, AuthListener authListener) {
         if(!isInstall()) {
             this.mAuthListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.e("wx not install");
@@ -100,8 +105,8 @@ public class WXHandler extends SSOHandler {
         this.mAuthListener = authListener;
 
         SendAuth.Req req1 = new SendAuth.Req();
-        req1.scope = sScope;
-        req1.state = "none";
+        req1.scope = scope;
+        req1.state = state;
 
         if(!this.mWXApi.sendReq(req1)) {
             this.mAuthListener.onError(this.mConfig.getName(), "sendReq fail");

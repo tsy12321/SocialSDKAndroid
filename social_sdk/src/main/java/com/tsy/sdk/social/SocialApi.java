@@ -85,6 +85,24 @@ public class SocialApi {
     }
 
     /**
+     * 第三方登录授权 供微信使用
+     * @param activity
+     * @param platformType 第三方平台
+     * @param scope 微信scope
+     * @param state 微信state
+     * @param authListener 授权回调
+     */
+    public void doOauthVerify(Activity activity, PlatformType platformType,
+                              String scope, String state, AuthListener authListener) throws Exception {
+        if(platformType != PlatformType.WEIXIN) {
+            throw new Exception("This doOauthVerify is only for weixin");
+        }
+        SSOHandler ssoHandler = getSSOHandler(platformType);
+        ssoHandler.onCreate(mContext, PlatformConfig.getPlatformConfig(platformType));
+        ssoHandler.authorize(activity, scope, state, authListener);
+    }
+
+    /**
      * 分享
      * @param platformType
      * @param shareMedia
