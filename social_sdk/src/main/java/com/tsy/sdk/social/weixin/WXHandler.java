@@ -90,7 +90,7 @@ public class WXHandler extends SSOHandler {
 
     @Override
     public void authorize(Activity activity, AuthListener authListener) {
-        authorize(activity, "none", sScope, authListener);
+        authorize(activity, sScope, "none", authListener);
     }
 
     @Override
