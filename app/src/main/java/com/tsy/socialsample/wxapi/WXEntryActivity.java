@@ -1,3 +1,5 @@
+package com.tsy.socialsample.wxapi;
+
 import com.tsy.sdk.social.weixin.WXCallbackActivity;
 
 /**

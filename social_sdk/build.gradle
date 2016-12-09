@@ -1,8 +1,11 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.tsy12321'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         minSdkVersion 9
@@ -20,11 +23,11 @@ android {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile files('libs/weixin_sdk_v3.1.1.jar')
-    compile files('libs/qq_sdk_v3.1.0.jar')
-    compile files('libs/qq_mta-sdk-1.6.2.jar')
-    compile files('libs/weiboSDKCore_3.1.4.jar')
+    compile 'com.android.support:appcompat-v7:24.2.1'
+//    compile files('libs/weixin_sdk_v3.1.1.jar')
+//    compile files('libs/qq_sdk_v3.1.0.jar')
+//    compile files('libs/qq_mta-sdk-1.6.2.jar')
+//    compile files('libs/weiboSDKCore_3.1.4.jar')
 }
 
 task clearJar(type: Delete) {

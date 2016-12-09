@@ -1,14 +1,15 @@
-package com.tsy.girl;
+package com.tsy.socialsample;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.sina.weibo.sdk.api.share.BaseResponse;
 import com.sina.weibo.sdk.api.share.IWeiboHandler;
-import com.tsy.girl.util.BitmapUtils;
+import com.tsy.socialsample.util.BitmapUtils;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.PlatformType;
 import com.tsy.sdk.social.SocialApi;
@@ -36,9 +37,9 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
     @BindView(R.id.radioGSharePlatform)
     RadioGroup radioGSharePlatform;
 
-    private static final String WX_APPID = "";    //申请的wx appid
-    private static final String QQ_APPID = "";    //申请的qq appid
-    private static final String SINA_WB_APPKEY = "";       //申请的新浪微博 appkey
+    private static final String WX_APPID = "your wx appid";    //申请的wx appid
+    private static final String QQ_APPID = "your qq appid";    //申请的qq appid
+    private static final String SINA_WB_APPKEY = "your sina wb appkey";       //申请的新浪微博 appkey
 
     private SocialApi mSocialApi;
 
@@ -64,22 +65,26 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
      */
     @OnClick(R.id.btnWXLogin)
     public void onWXLogin() {
-        mSocialApi.doOauthVerify(this, PlatformType.WEIXIN, new AuthListener() {
-            @Override
-            public void onComplete(PlatformType platform_type, Map<String, String> map) {
-                Log.i("tsy", "login onComplete:" + map);
-            }
+        try {
+            mSocialApi.doOauthVerify(this, PlatformType.WEIXIN , new AuthListener() {
+                @Override
+                public void onComplete(PlatformType platform_type, Map<String, String> map) {
+                    Log.i("tsy", "login onComplete:" + map);
+                }
 
-            @Override
-            public void onError(PlatformType platform_type, String err_msg) {
-                Log.i("tsy", "login onError:" + err_msg);
-            }
+                @Override
+                public void onError(PlatformType platform_type, String err_msg) {
+                    Log.i("tsy", "login onError:" + err_msg);
+                }
 
-            @Override
-            public void onCancel(PlatformType platform_type) {
-                Log.i("tsy", "login onCancel");
-            }
-        });
+                @Override
+                public void onCancel(PlatformType platform_type) {
+                    Log.i("tsy", "login onCancel");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -202,16 +207,19 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
 
         @Override
         public void onComplete(PlatformType platform_type) {
+            Toast.makeText(MainActivity.this, "share onComplete", Toast.LENGTH_SHORT).show();
             Log.i("tsy", "share onComplete");
         }
 
         @Override
         public void onError(PlatformType platform_type, String err_msg) {
+            Toast.makeText(MainActivity.this, "share onError:" + err_msg, Toast.LENGTH_SHORT).show();
             Log.i("tsy", "share onError:" + err_msg);
         }
 
         @Override
         public void onCancel(PlatformType platform_type) {
+            Toast.makeText(MainActivity.this, "share onCancel", Toast.LENGTH_SHORT).show();
             Log.i("tsy", "share onCancel");
         }
     }
