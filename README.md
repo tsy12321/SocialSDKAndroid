@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
 
 替换builde.gradle文件中的签名为自己的app签名。
 
-修改完上面3个地方后即可跑通Demo
+修改完上面3个地方后即可跑通Demo。如下
+
+![Demo](https://github.com/tsy12321/SocialSDKAndroid/blob/master/Demo.jpg)
 
 ## 2 功能介绍
 
