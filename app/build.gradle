@@ -12,6 +12,25 @@ android {
         versionName "1.0"
     }
 
+//    signingConfigs {
+//        release {
+//            storeFile file("your sign file")
+//            storePassword "your password"
+//            keyAlias "your keyAlias"
+//            keyPassword "your keyPassword"
+//        }
+//    }
+//
+//    buildTypes {
+//        debug {
+//            signingConfig signingConfigs.release
+//        }
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+//    }
+
     //引入微博的所有so库
     sourceSets {
         main {
