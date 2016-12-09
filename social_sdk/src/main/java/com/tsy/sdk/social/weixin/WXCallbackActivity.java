@@ -14,7 +14,7 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 /**
  * Created by tsy on 16/8/4.
  */
-public abstract class WXCallbackActivity extends Activity implements IWXAPIEventHandler {
+public class WXCallbackActivity extends Activity implements IWXAPIEventHandler {
 
     protected WXHandler mWXHandler = null;
 

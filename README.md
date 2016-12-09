@@ -1,7 +1,8 @@
 # SocialSDKAndroid
-对第三方社会化sdk的集成和二次封装，比如第三方授权登录、第三方分享等
 
-> 欢迎发issue建议新的功能点和渠道集成
+[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
+> 对第三方社会化sdk的集成和二次封装，比如第三方授权登录、第三方分享等. 欢迎发issue建议新的功能点和渠道集成
 
 原文阅读:
 
@@ -17,18 +18,60 @@
 |1.2|将微信appsecret移除,客户端不放appsecret|
 |1.3|增加新浪微博授权登录和分享|
 |1.4|增加可选的Api调用|
+|1.5|增加接口特殊处理微信授权（可以自定义scope和state）|
+|1.5.2|将WXCallbackActivity改为普通class，简化微信接入时要创建WXEntryActivity的步骤|
 
-## 1 目录介绍
+## 1 总体概述
 
 采用了jar包的方式封装sdk,需要使用时可以引入social_sdk.jar再搭配需要的平台sdk使用.
 这种方式可以减少sdk的体积,需要什么平台就引入哪个平台.更为合理.
 
+### 1.1 目录介绍
+
+- app/ Demo代码
 - social_sdk/ sdk的开发源码module 开发完成后用gradle中makejar打成jar包
-- social_sdk.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
+- social_sdk_vxxx.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
 - weixin_sdk/ 微信sdk
 - qq_sdk/ qq sdk
 - sina_weibo_sdk/ 新浪微博 sdk
-- SampleCode/ 一个示例代码(非可运行项目)
+
+### 1.2 Demo介绍
+
+替换Demo中的MainActivity中的qq appid、wx appid、weibo appkey为自己的
+
+```java
+public class MainActivity extends AppCompatActivity implements IWeiboHandler.Response{
+
+    ...
+
+    private static final String WX_APPID = "your wx appid";    //申请的wx appid
+    private static final String QQ_APPID = "your qq appid";    //申请的qq appid
+    private static final String SINA_WB_APPKEY = "your sina wb appkey";       //申请的新浪微博 appkey
+
+    ...
+}
+```
+
+替换AndroidManifest中的qq appid为自己的
+
+```java
+<!--qq-->
+<activity
+    android:name="com.tencent.tauth.AuthActivity"
+    android:noHistory="true"
+    android:launchMode="singleTask" >
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="tencent1111111" /> <!--1111111改为你的qq appid-->
+    </intent-filter>
+</activity>
+```
+
+替换builde.gradle文件中的签名为自己的app签名。
+
+修改完上面3个地方后即可跑通Demo
 
 ## 2 功能介绍
 
@@ -232,30 +275,19 @@ shareMedia.setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_
 
 #### 4.1.2 配置
 
-创建固定activity: 包名.wxapi.WXEntryActivity.java
-该activity继承WXCallbackActivity类.
-
-```java
-...
-import com.tsy.sdk.social.weixin.WXCallbackActivity;
-
-/**
- * Created by tsy on 16/8/4.
- */
-public class WXEntryActivity extends WXCallbackActivity {
-
-}
-```
-
 AndroidManifest中添加:
 
 ```java
 <activity
-    android:name=".wxapi.WXEntryActivity"
-    android:configChanges="keyboardHidden|orientation|screenSize"
+    android:name="com.tsy.sdk.social.weixin.WXCallbackActivity"
+    android:configChanges="orientation|keyboardHidden|navigation|screenSize"
     android:exported="true"
-    android:screenOrientation="portrait"
+    android:launchMode="singleTop"
     android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+<activity-alias
+    android:name=".wxapi.WXEntryActivity"
+    android:exported="true"
+    android:targetActivity="com.tsy.sdk.social.weixin.WXCallbackActivity" />
 ```
 
 #### 4.1.3 常量定义
@@ -374,7 +406,7 @@ AndroidManifest中添加:
 并且在发起分享的activity页面的AndroidManifest页面中加上
 
 ```java
-<activity android:name="com.tsy.girl.MainActivity">     <!--发起分享的页面-->
+<activity android:name="com.tsy.socialsample.MainActivity">     <!--发起分享的页面-->
     <intent-filter>
         <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
         <category android:name="android.intent.category.DEFAULT" />
@@ -431,6 +463,26 @@ PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 使用新浪登录分享需要签名打包，并且签名和包名要和新浪平台填入的信息一致。
 
 
-## 欢迎关注我的公众号
+## About Me
+简书地址：http://www.jianshu.com/users/21716b19302d/latest_articles
+
+微信公众号
 
 ![我的公众号](https://github.com/tsy12321/PayAndroid/blob/master/wxmp_avatar.jpg)
+
+License
+-------
+
+    Copyright 2017 SY.Tang
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.

@@ -1,6 +1,9 @@
 package com.tsy.socialsample;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,7 +12,6 @@ import android.widget.Toast;
 
 import com.sina.weibo.sdk.api.share.BaseResponse;
 import com.sina.weibo.sdk.api.share.IWeiboHandler;
-import com.tsy.socialsample.util.BitmapUtils;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.PlatformType;
 import com.tsy.sdk.social.SocialApi;
@@ -23,6 +25,7 @@ import com.tsy.sdk.social.share_media.ShareVideoMedia;
 import com.tsy.sdk.social.share_media.ShareWebMedia;
 import com.tsy.sdk.social.sina.SinaWBHandler;
 
+import java.io.InputStream;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
 
             case R.id.radioShareImage:
                 shareMedia = new ShareImageMedia();
-                ((ShareImageMedia)shareMedia).setImage(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+                ((ShareImageMedia)shareMedia).setImage(readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
                 break;
 
             case R.id.radioShareMusic:
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
                 ((ShareMusicMedia)shareMedia).setTitle("分享音乐测试");
                 ((ShareMusicMedia)shareMedia).setDescription("分享音乐测试");
                 ((ShareMusicMedia)shareMedia).setMusicUrl("http://tsy.tunnel.nibaguai.com/splash/music.mp3");
-                ((ShareMusicMedia)shareMedia).setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+                ((ShareMusicMedia)shareMedia).setThumb(readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
                 break;
 
             case R.id.radioShareVideo:
@@ -161,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
                 ((ShareVideoMedia)shareMedia).setTitle("分享视频测试");
                 ((ShareVideoMedia)shareMedia).setDescription("分享视频测试");
                 ((ShareVideoMedia)shareMedia).setVideoUrl("http://tsy.tunnel.nibaguai.com/splash/music.mp3");
-                ((ShareVideoMedia)shareMedia).setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+                ((ShareVideoMedia)shareMedia).setThumb(readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
                 break;
 
             case R.id.radioShareWeb:
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
                 ((ShareWebMedia)shareMedia).setTitle("分享网页测试");
                 ((ShareWebMedia)shareMedia).setDescription("分享网页测试");
                 ((ShareWebMedia)shareMedia).setWebPageUrl("http://www.baidu.com");
-                ((ShareWebMedia)shareMedia).setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+                ((ShareWebMedia)shareMedia).setThumb(readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
                 break;
 
             default:
@@ -237,5 +240,14 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mSocialApi.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private Bitmap readBitMap(Context context, int resId) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPurgeable = true;
+        opt.inInputShareable = true;
+        InputStream is = context.getResources().openRawResource(resId);
+        return BitmapFactory.decodeStream(is, null, opt);
     }
 }

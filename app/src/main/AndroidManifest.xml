@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.tsy.socialsample.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -28,11 +28,15 @@
 
         <!--Weixin-->
         <activity
-            android:name="com.tsy.socialsample.wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:name="com.tsy.sdk.social.weixin.WXCallbackActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity-alias
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:targetActivity="com.tsy.sdk.social.weixin.WXCallbackActivity" />
 
         <!--qq-->
         <activity
@@ -43,7 +47,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="your qq appid" />
+                <data android:scheme="tencent1111111" /> <!--1111111改为你的qq appid-->
             </intent-filter>
         </activity>
         <activity
