@@ -69,22 +69,7 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
     @OnClick(R.id.btnWXLogin)
     public void onWXLogin() {
         try {
-            mSocialApi.doOauthVerify(this, PlatformType.WEIXIN , new AuthListener() {
-                @Override
-                public void onComplete(PlatformType platform_type, Map<String, String> map) {
-                    Log.i("tsy", "login onComplete:" + map);
-                }
-
-                @Override
-                public void onError(PlatformType platform_type, String err_msg) {
-                    Log.i("tsy", "login onError:" + err_msg);
-                }
-
-                @Override
-                public void onCancel(PlatformType platform_type) {
-                    Log.i("tsy", "login onCancel");
-                }
-            });
+            mSocialApi.doOauthVerify(this, PlatformType.WEIXIN , new MyAuthListener());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,22 +80,7 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
      */
     @OnClick(R.id.btnQQLogin)
     public void onQQLogin() {
-        mSocialApi.doOauthVerify(this, PlatformType.QQ, new AuthListener() {
-            @Override
-            public void onComplete(PlatformType platform_type, Map<String, String> map) {
-                Log.i("tsy", "login onComplete:" + map);
-            }
-
-            @Override
-            public void onError(PlatformType platform_type, String err_msg) {
-                Log.i("tsy", "login onError:" + err_msg);
-            }
-
-            @Override
-            public void onCancel(PlatformType platform_type) {
-                Log.i("tsy", "login onCancel");
-            }
-        });
+        mSocialApi.doOauthVerify(this, PlatformType.QQ, new MyAuthListener());
     }
 
     /**
@@ -118,22 +88,27 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
      */
     @OnClick(R.id.btnSinaWBLogin)
     public void onSinaWBLogin() {
-        mSocialApi.doOauthVerify(this, PlatformType.SINA_WB, new AuthListener() {
-            @Override
-            public void onComplete(PlatformType platform_type, Map<String, String> map) {
-                Log.i("tsy", "login onComplete:" + map);
-            }
+        mSocialApi.doOauthVerify(this, PlatformType.SINA_WB, new MyAuthListener());
+    }
 
-            @Override
-            public void onError(PlatformType platform_type, String err_msg) {
-                Log.i("tsy", "login onError:" + err_msg);
-            }
+    public class MyAuthListener implements AuthListener {
+        @Override
+        public void onComplete(PlatformType platform_type, Map<String, String> map) {
+            Toast.makeText(MainActivity.this, platform_type + " login onComplete", Toast.LENGTH_SHORT).show();
+            Log.i("tsy", "login onComplete:" + map);
+        }
 
-            @Override
-            public void onCancel(PlatformType platform_type) {
-                Log.i("tsy", "login onCancel");
-            }
-        });
+        @Override
+        public void onError(PlatformType platform_type, String err_msg) {
+            Toast.makeText(MainActivity.this, platform_type + " login onError:" + err_msg, Toast.LENGTH_SHORT).show();
+            Log.i("tsy", "login onError:" + err_msg);
+        }
+
+        @Override
+        public void onCancel(PlatformType platform_type) {
+            Toast.makeText(MainActivity.this, platform_type + " login onCancel", Toast.LENGTH_SHORT).show();
+            Log.i("tsy", "login onCancel");
+        }
     }
 
     @OnClick(R.id.btnShare)
@@ -210,20 +185,17 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
 
         @Override
         public void onComplete(PlatformType platform_type) {
-            Toast.makeText(MainActivity.this, "share onComplete", Toast.LENGTH_SHORT).show();
-            Log.i("tsy", "share onComplete");
+            Toast.makeText(MainActivity.this, platform_type + " share onComplete", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(PlatformType platform_type, String err_msg) {
-            Toast.makeText(MainActivity.this, "share onError:" + err_msg, Toast.LENGTH_SHORT).show();
-            Log.i("tsy", "share onError:" + err_msg);
+            Toast.makeText(MainActivity.this, platform_type + " share onError:" + err_msg, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(PlatformType platform_type) {
-            Toast.makeText(MainActivity.this, "share onCancel", Toast.LENGTH_SHORT).show();
-            Log.i("tsy", "share onCancel");
+            Toast.makeText(MainActivity.this, platform_type + " share onCancel", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -251,3 +223,4 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
         return BitmapFactory.decodeStream(is, null, opt);
     }
 }
+

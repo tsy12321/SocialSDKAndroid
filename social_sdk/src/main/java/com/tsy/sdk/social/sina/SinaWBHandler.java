@@ -190,11 +190,15 @@ public class SinaWBHandler extends SSOHandler {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        if(mSsoHandler != null) {
+            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
     }
 
     public void onNewIntent(Intent intent, IWeiboHandler.Response response) {
-        mWeiboShareAPI.handleWeiboResponse(intent, response);
+        if(mWeiboShareAPI != null) {
+            mWeiboShareAPI.handleWeiboResponse(intent, response);
+        }
     }
 
     public void onResponse(BaseResponse baseResponse) {

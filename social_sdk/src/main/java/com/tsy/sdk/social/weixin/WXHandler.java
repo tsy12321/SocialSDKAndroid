@@ -48,6 +48,7 @@ public class WXHandler extends SSOHandler {
     private IWXAPI mWXApi;
     private static String sScope = "snsapi_userinfo,snsapi_friend,snsapi_message";
     private IWXAPIEventHandler mEventHandler;
+    private String mLastTransaction = "";
 
     private PlatformConfig.Weixin mConfig;
     private AuthListener mAuthListener;
@@ -56,6 +57,10 @@ public class WXHandler extends SSOHandler {
     public WXHandler() {
         this.mEventHandler = new IWXAPIEventHandler() {
             public void onResp(BaseResp resp) {
+                if(!mLastTransaction.equals(resp.transaction)) {
+                    return;
+                }
+
                 int type = resp.getType();
                 switch(type) {
                     case ConstantsAPI.COMMAND_SENDAUTH:     //授权返回
@@ -107,6 +112,8 @@ public class WXHandler extends SSOHandler {
         SendAuth.Req req1 = new SendAuth.Req();
         req1.scope = scope;
         req1.state = state;
+        req1.transaction = buildTransaction("authorize");
+        mLastTransaction = req1.transaction;
 
         if(!this.mWXApi.sendReq(req1)) {
             this.mAuthListener.onError(this.mConfig.getName(), "sendReq fail");
@@ -227,6 +234,7 @@ public class WXHandler extends SSOHandler {
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.message = msg;
         req.transaction = buildTransaction(type);
+        mLastTransaction = req.transaction;
 
         if(this.mConfig.getName() == PlatformType.WEIXIN) {     //分享好友
             req.scene = SendMessageToWX.Req.WXSceneSession;

@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.tsy.sdk.social.PlatformConfig;
-import com.tsy.sdk.social.PlatformType;
-import com.tsy.sdk.social.SocialApi;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
+import com.tsy.sdk.social.PlatformConfig;
+import com.tsy.sdk.social.PlatformType;
+import com.tsy.sdk.social.SocialApi;
 
 /**
  * Created by tsy on 16/8/4.
@@ -17,6 +17,8 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 public class WXCallbackActivity extends Activity implements IWXAPIEventHandler {
 
     protected WXHandler mWXHandler = null;
+    protected WXHandler mWXCircleHandler = null;
+
 
     public WXCallbackActivity() {
 
@@ -27,6 +29,10 @@ public class WXCallbackActivity extends Activity implements IWXAPIEventHandler {
         SocialApi api = SocialApi.get(this.getApplicationContext());
         this.mWXHandler = (WXHandler)api.getSSOHandler(PlatformType.WEIXIN);
         this.mWXHandler.onCreate(this.getApplicationContext(), PlatformConfig.getPlatformConfig(PlatformType.WEIXIN));
+
+        this.mWXCircleHandler = (WXHandler)api.getSSOHandler(PlatformType.WEIXIN_CIRCLE);
+        this.mWXCircleHandler.onCreate(this.getApplicationContext(), PlatformConfig.getPlatformConfig(PlatformType.WEIXIN_CIRCLE));
+
         this.mWXHandler.getWXApi().handleIntent(this.getIntent(), this);
     }
 
@@ -35,6 +41,10 @@ public class WXCallbackActivity extends Activity implements IWXAPIEventHandler {
         SocialApi api = SocialApi.get(this.getApplicationContext());
         this.mWXHandler = (WXHandler)api.getSSOHandler(PlatformType.WEIXIN);
         this.mWXHandler.onCreate(this.getApplicationContext(), PlatformConfig.getPlatformConfig(PlatformType.WEIXIN));
+
+        this.mWXCircleHandler = (WXHandler)api.getSSOHandler(PlatformType.WEIXIN_CIRCLE);
+        this.mWXCircleHandler.onCreate(this.getApplicationContext(), PlatformConfig.getPlatformConfig(PlatformType.WEIXIN_CIRCLE));
+
         this.mWXHandler.getWXApi().handleIntent(this.getIntent(), this);
     }
 
@@ -42,6 +52,14 @@ public class WXCallbackActivity extends Activity implements IWXAPIEventHandler {
         if(this.mWXHandler != null && resp != null) {
             try {
                 this.mWXHandler.getWXEventHandler().onResp(resp);
+            } catch (Exception var3) {
+                ;
+            }
+        }
+
+        if(this.mWXCircleHandler != null && resp != null) {
+            try {
+                this.mWXCircleHandler.getWXEventHandler().onResp(resp);
             } catch (Exception var3) {
                 ;
             }
