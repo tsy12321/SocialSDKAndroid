@@ -9,17 +9,9 @@
 [http://www.jianshu.com/p/4ec1d9c15763](http://www.jianshu.com/p/4ec1d9c15763)
 
 
-## 0 版本更新
+## 0 版本更新记录
 
-|版本号|更新内容|
-|---|---|
-|1.0|集成微信授权登录,5种分享媒介,微信会话分享,微信朋友圈分享|
-|1.1|集成QQ授权登录,QQ分享,QQ空间分享|
-|1.2|将微信appsecret移除,客户端不放appsecret|
-|1.3|增加新浪微博授权登录和分享|
-|1.4|增加可选的Api调用|
-|1.5|增加接口特殊处理微信授权（可以自定义scope和state）|
-|1.5.2|将WXCallbackActivity改为普通class，简化微信接入时要创建WXEntryActivity的步骤|
+[版本更新记录](https://github.com/tsy12321/SocialSDKAndroid/releases)
 
 ## 1 总体概述
 
