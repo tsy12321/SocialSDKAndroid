@@ -59,7 +59,7 @@ dependencies {
 
 //    compile project(':social_sdk')
     //social sdk
-    compile files('libs/social_sdk_v1.5.3.jar')
+    compile files('libs/social_sdk_v1.5.4.jar')
     compile files('libs/weixin_sdk_v3.1.1.jar')
     compile files('libs/qq_mta-sdk-1.6.2.jar')
     compile files('libs/qq_sdk_v3.1.0.jar')

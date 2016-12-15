@@ -101,7 +101,7 @@ public class WXHandler extends SSOHandler {
     @Override
     public void authorize(Activity activity, String scope, String state, AuthListener authListener) {
         if(!isInstall()) {
-            this.mAuthListener.onError(this.mConfig.getName(), "wx not install");
+            authListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.e("wx not install");
             return ;
         }
