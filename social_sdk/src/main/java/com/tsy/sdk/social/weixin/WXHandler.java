@@ -46,7 +46,11 @@ public class WXHandler extends SSOHandler {
     private Activity mActivtiy;
 
     private IWXAPI mWXApi;
+
+    //默认scope 和 state
     private static String sScope = "snsapi_userinfo,snsapi_friend,snsapi_message";
+    private static String sState = "none";
+
     private IWXAPIEventHandler mEventHandler;
     private String mLastTransaction = "";
 
@@ -79,6 +83,16 @@ public class WXHandler extends SSOHandler {
         };
     }
 
+    /**
+     * 设置scope和state
+     * @param scope
+     * @param state
+     */
+    public static void setScopeState(String scope, String state) {
+        sScope = scope;
+        sState = state;
+    }
+
     @Override
     public void onCreate(Context context, PlatformConfig.Platform config) {
         this.mContext = context;
@@ -95,11 +109,6 @@ public class WXHandler extends SSOHandler {
 
     @Override
     public void authorize(Activity activity, AuthListener authListener) {
-        authorize(activity, sScope, "none", authListener);
-    }
-
-    @Override
-    public void authorize(Activity activity, String scope, String state, AuthListener authListener) {
         if(!isInstall()) {
             authListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.e("wx not install");
@@ -110,8 +119,8 @@ public class WXHandler extends SSOHandler {
         this.mAuthListener = authListener;
 
         SendAuth.Req req1 = new SendAuth.Req();
-        req1.scope = scope;
-        req1.state = state;
+        req1.scope = sScope;
+        req1.state = sState;
         req1.transaction = buildTransaction("authorize");
         mLastTransaction = req1.transaction;
 

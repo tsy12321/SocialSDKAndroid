@@ -95,35 +95,12 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
 
 ### 2.3 API调用
 
-当第三方授权成功后获取到access_token，会提供一些API查询用户信息，刷新access_token等。现在逐步开始封装API，方便使用。
+SDK中封装了部分API，比如当第三方授权成功后获取到access_token，会提供一些API查询用户信息，刷新access_token等。
 
-#### 2.3.1 微信API (WXApi)
+**！注意：由于调用这些API会用到appsecret，所以一般不建议放到客户端做**
 
-1. getAccessToken(String wxAppId, String wxAppSecret,
-                                      String code,
-                                      final Callback callback)
+具体API见底附录。
 
-   ```java
-	/**
-	 * 获取access_token
-	 * @param wxAppId wx appid
-	 * @param wxAppSecret wx appsecret
-	 * @param code 调用微信登录获取的code
-	 * @param callback
-	 */
-   ```
-   
-1. getUserInfo(String openid, String access_token,
-                                   final Callback callback)
-                                   
-   ```java
-   /**
-     * 获取用户信息
-     * @param openid openid
-     * @param access_token access_token
-     * @param callback
-     */
-   ```
 
 ## 3 开发说明
 
@@ -298,7 +275,19 @@ PlatformType:
 
 朋友圈:PlatformType.WEIXIN_CIRCLE(用于微信朋友圈分享)
 
-#### 4.1.4 注意
+
+#### 4.1.4 自定义scope state
+
+可以通过接口setScopeState修改 scope 和 state。
+
+默认scope是 "snsapi_userinfo,snsapi_friend,snsapi_message"
+默认state是 "none"
+
+```java
+WXHandler.setScopeState("your scope", "your state");
+```
+
+#### 4.1.5 注意
 
 使用微信登录分享需要签名打包，并且签名和包名要和微信平台填入的信息一致。
 
@@ -452,10 +441,55 @@ if (savedInstanceState != null) {
 PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 ```
 
-#### 4.3.4 注意
+#### 4.3.4 自定义REDIRECT_URL
+
+可以通过接口setRedirctUrl修改 REDIRECT_URL
+
+默认REDIRECT_URL是 "https://api.weibo.com/oauth2/default.html"
+
+```java
+SinaWBHandler.setRedirctUrl("your RedirctUrl");
+```
+
+#### 4.3.5 注意
 
 使用新浪登录分享需要签名打包，并且签名和包名要和新浪平台填入的信息一致。
 
+并且微博开放平台的回调地址（REDIRECT_URL）要和代码中的REDIRECT_URL一致
+
+## 附录
+
+### API列表
+
+#### 1 微信API (WXApi)
+
+1. 获取access_token
+
+   ```java
+	/**
+	 * 获取access_token
+	 * @param wxAppId wx appid
+	 * @param wxAppSecret wx appsecret
+	 * @param code 调用微信登录获取的code
+	 * @param callback
+	 */
+   ```
+    getAccessToken(String wxAppId, String wxAppSecret,
+                                      String code,
+                                      final Callback callback)
+
+1. 获取用户信息
+
+   ```java
+   /**
+     * 获取用户信息
+     * @param openid openid
+     * @param access_token access_token
+     * @param callback
+     */
+   ```
+    getUserInfo(String openid, String access_token,
+                                       final Callback callback)
 
 ## About Me
 简书地址：http://www.jianshu.com/users/21716b19302d/latest_articles

@@ -31,17 +31,6 @@ public abstract class SSOHandler {
     }
 
     /**
-     * 登录授权 供微信使用
-     * @param activity
-     * @param scope 微信scope
-     * @param state 微信state
-     * @param authListener 授权回调
-     */
-    public void authorize(Activity activity, String scope, String state, AuthListener authListener) {
-
-    }
-
-    /**
      * 分享
      * @param shareMedia 分享内容
      * @param shareListener 分享回调

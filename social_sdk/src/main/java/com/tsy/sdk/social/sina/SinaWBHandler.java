@@ -55,8 +55,16 @@ public class SinaWBHandler extends SSOHandler {
     private AuthListener mAuthListener;
     private ShareListener mShareListener;
 
-    private final String REDIRECT_URL = "http://sns.whalecloud.com/sina2/callback";// 应用的回调页
+    private static String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";// 应用的回调页 要和微博开放平台的回调地址一致
     private final String SCOPE = "";
+
+    /**
+     * 设置微博 REDIRECT_URL
+     * @param redirctUrl
+     */
+    public static void setRedirctUrl(String redirctUrl) {
+        REDIRECT_URL = redirctUrl;
+    }
 
     @Override
     public void onCreate(Context context, PlatformConfig.Platform config) {

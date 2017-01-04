@@ -68,11 +68,7 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
      */
     @OnClick(R.id.btnWXLogin)
     public void onWXLogin() {
-        try {
-            mSocialApi.doOauthVerify(this, PlatformType.WEIXIN , new MyAuthListener());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mSocialApi.doOauthVerify(this, PlatformType.WEIXIN , new MyAuthListener());
     }
 
     /**
