@@ -491,6 +491,22 @@ SinaWBHandler.setRedirctUrl("your RedirctUrl");
     getUserInfo(String openid, String access_token,
                                        final Callback callback)
 
+## 混淆
+
+```
+#social
+-dontwarn com.tsy.sdk.social.**
+-keep class com.tsy.sdk.social.**{*;}
+
+#qq & weixin
+-dontwarn  com.tencent.**
+-keep class com.tencent.** {*;}
+
+#sina
+-dontwarn  com.sina.**
+-keep class com.sina.** {*;}
+```
+
 ## About Me
 简书地址：http://www.jianshu.com/users/21716b19302d/latest_articles
 
