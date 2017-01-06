@@ -11,7 +11,7 @@
 
 ## 0 版本更新记录
 
-[版本更新记录](https://github.com/tsy12321/SocialSDKAndroid/releases)
+[版本更新记录](https://github.com/tsy12321/SocialSDKAndroid/blob/master/CHANGELOG.md)
 
 ## 1 总体概述
 
