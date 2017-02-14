@@ -10,8 +10,6 @@ import android.util.Log;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.sina.weibo.sdk.api.share.BaseResponse;
-import com.sina.weibo.sdk.api.share.IWeiboHandler;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.PlatformType;
 import com.tsy.sdk.social.SocialApi;
@@ -23,7 +21,6 @@ import com.tsy.sdk.social.share_media.ShareMusicMedia;
 import com.tsy.sdk.social.share_media.ShareTextMedia;
 import com.tsy.sdk.social.share_media.ShareVideoMedia;
 import com.tsy.sdk.social.share_media.ShareWebMedia;
-import com.tsy.sdk.social.sina.SinaWBHandler;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -32,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements IWeiboHandler.Response{
+public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.radioGShareMedia)
     RadioGroup radioGShareMedia;
@@ -57,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
         PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 
         mSocialApi = SocialApi.get(getApplicationContext());
-
-        if (savedInstanceState != null) {
-            ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onNewIntent(getIntent(), this);
-        }
     }
 
     /**
@@ -196,16 +189,6 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onNewIntent(intent, this);
-    }
-
-    @Override
-    public void onResponse(BaseResponse baseResponse) {
-        ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onResponse(baseResponse);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mSocialApi.onActivityResult(requestCode, resultCode, data);
     }
@@ -219,4 +202,3 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
         return BitmapFactory.decodeStream(is, null, opt);
     }
 }
-
