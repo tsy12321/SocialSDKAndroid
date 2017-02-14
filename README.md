@@ -376,20 +376,26 @@ android {
 
 #### 4.3.2 配置
 
+创建文件 `WBShareActivity` 继承 `WBShareCallbackActivity`
+
+```java
+public class WBShareActivity extends WBShareCallbackActivity {
+}
+```
+
 AndroidManifest中添加:
 
 ```java
+<!--微博-->
 <activity
     android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
     android:configChanges="keyboardHidden|orientation"
     android:exported="false"
     android:windowSoftInputMode="adjustResize"></activity>
-```
-
-并且在发起分享的activity页面的AndroidManifest页面中加上
-
-```java
-<activity android:name="com.tsy.socialsample.MainActivity">     <!--发起分享的页面-->
+<activity
+    android:name=".WBShareActivity"
+    android:configChanges="keyboardHidden|orientation"
+    android:screenOrientation="portrait" >
     <intent-filter>
         <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
         <category android:name="android.intent.category.DEFAULT" />
@@ -397,43 +403,20 @@ AndroidManifest中添加:
 </activity>
 ```
 
-然后在发起分享的Activity中添加以下代码.(假如是MainActivity)
+#### 4.3.3 回调设置
 
-实现IWeiboHandler.Response接口, 然后在实现的方法中写:
-
-```java
-@Override
-public void onResponse(BaseResponse baseResponse) {
-    ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onResponse(baseResponse);
-}
-```
-
-实现onNewIntent和onActivityResult方法:
+要在onActivityResult添加以下(如果qq已经添加则不需要重复添加)
 
 ```java
-@Override
-protected void onNewIntent(Intent intent) {
-    ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onNewIntent(intent, this);
-}
-
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
     mSocialApi.onActivityResult(requestCode, resultCode, data);
 }
-
 ```
 
-在onCreate中添加以下:
-
-```java
-if (savedInstanceState != null) {
-    ((SinaWBHandler)mSocialApi.getSSOHandler(PlatformType.SINA_WB)).onNewIntent(getIntent(), this);
-}
-```
-
-然后正常发起授权或者分享代码即可.
-
-#### 4.3.3 常量定义
+#### 4.3.4 常量定义
 
 设置配置信息:
 
@@ -441,7 +424,7 @@ if (savedInstanceState != null) {
 PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 ```
 
-#### 4.3.4 自定义REDIRECT_URL
+#### 4.3.5 自定义REDIRECT_URL
 
 可以通过接口setRedirctUrl修改 REDIRECT_URL
 
@@ -451,7 +434,7 @@ PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 SinaWBHandler.setRedirctUrl("your RedirctUrl");
 ```
 
-#### 4.3.5 注意
+#### 4.3.6 注意
 
 使用新浪登录分享需要签名打包，并且签名和包名要和新浪平台填入的信息一致。
 
