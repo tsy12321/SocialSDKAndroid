@@ -25,7 +25,6 @@
 - social_sdk_vxxx.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
 - weixin_sdk/ 微信sdk
 - qq_sdk/ qq sdk
-- sina_weibo_sdk/ 新浪微博 sdk
 
 ### 1.2 Demo介绍
 
@@ -356,22 +355,16 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 #### 4.3.1 集成sdk
 
-将目录中的weiboSDKCore_3.1.4.jar放入项目.
-
-将所有so文件统一放到项目的目录app/jniLibs中(和libs同级), 然后在gradle中加上
+在项目根目录的build.gradle中增加中央仓库
 
 ```
-android {
+maven { url "https://dl.bintray.com/thelasterstar/maven/" }
+```
 
-    ...
+在需要引入SDK的module目录的build.gradle中引入sdk-core依赖
 
-    //引入微博的所有so库
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['jniLibs']
-        }
-    }
-}
+```
+compile 'com.sina.weibo.sdk:core:1.0.0:openDefaultRelease@aar'
 ```
 
 #### 4.3.2 配置

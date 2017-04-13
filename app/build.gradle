@@ -50,11 +50,12 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
 
-    compile project(':social_sdk')
+//    compile project(':social_sdk')
     //social sdk
-//    compile files('libs/social_sdk_v1.6.0.jar')
-//    compile files('libs/weixin_sdk_v3.1.1.jar')
-//    compile files('libs/qq_mta-sdk-1.6.2.jar')
-//    compile files('libs/qq_sdk_v3.1.0.jar')
+    compile files('libs/social_sdk_v1.7.0.jar')
+    compile files('libs/weixin_sdk_v3.1.1.jar')
+    compile files('libs/qq_mta-sdk-1.6.2.jar')
+    compile files('libs/qq_sdk_v3.1.0.jar')
+    compile 'com.sina.weibo.sdk:core:1.0.0:openDefaultRelease@aar'
 }
 
