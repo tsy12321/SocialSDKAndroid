@@ -18,6 +18,7 @@ import com.tsy.sdk.social.listener.ShareListener;
 import com.tsy.sdk.social.share_media.IShareMedia;
 import com.tsy.sdk.social.share_media.ShareImageMedia;
 import com.tsy.sdk.social.share_media.ShareMusicMedia;
+import com.tsy.sdk.social.share_media.ShareTextImageMedia;
 import com.tsy.sdk.social.share_media.ShareTextMedia;
 import com.tsy.sdk.social.share_media.ShareVideoMedia;
 import com.tsy.sdk.social.share_media.ShareWebMedia;
@@ -113,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.radioShareImage:
                 shareMedia = new ShareImageMedia();
                 ((ShareImageMedia)shareMedia).setImage(readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
+                break;
+
+            case R.id.radioShareTextImage:
+                shareMedia = new ShareTextImageMedia();
+                ((ShareTextImageMedia)shareMedia).setText("分享文字测试");
+                ((ShareTextImageMedia)shareMedia).setImage(readBitMap(getApplicationContext(), R.mipmap.ic_launcher));
                 break;
 
             case R.id.radioShareMusic:
