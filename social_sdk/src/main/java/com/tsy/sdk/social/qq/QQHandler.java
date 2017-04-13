@@ -123,7 +123,7 @@ public class QQHandler extends SSOHandler {
                 params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, path_arr);  //!这里是大坑 不能用SHARE_TO_QQ_IMAGE_LOCAL_URL
             } else {
                 if(this.mShareListener != null) {
-                    this.mShareListener.onError(this.mConfig.getName(), "shareMedia error");
+                    this.mShareListener.onError(this.mConfig.getName(), "QZone is not support this shareMedia");
                 }
                 return ;
             }
@@ -181,7 +181,7 @@ public class QQHandler extends SSOHandler {
                 params.putString(QQShare.SHARE_TO_QQ_AUDIO_URL, shareMusicMedia.getMusicUrl());
             } else {
                 if(this.mShareListener != null) {
-                    this.mShareListener.onError(this.mConfig.getName(), "shareMedia error");
+                    this.mShareListener.onError(this.mConfig.getName(), "QQ is not support this shareMedia");
                 }
                 return ;
             }

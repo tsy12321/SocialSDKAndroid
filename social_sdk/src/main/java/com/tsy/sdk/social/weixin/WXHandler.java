@@ -229,7 +229,7 @@ public class WXHandler extends SSOHandler {
             msg.thumbData = BitmapUtils.bitmap2Bytes(shareVideoMedia.getThumb());
         } else {
             if(this.mShareListener != null) {
-                this.mShareListener.onError(this.mConfig.getName(), "shareMedia error");
+                this.mShareListener.onError(this.mConfig.getName(), "weixin is not support this shareMedia");
             }
             return ;
         }

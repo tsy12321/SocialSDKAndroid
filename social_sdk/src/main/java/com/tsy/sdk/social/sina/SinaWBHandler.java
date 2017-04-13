@@ -6,10 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.sina.weibo.sdk.api.ImageObject;
-import com.sina.weibo.sdk.api.MusicObject;
 import com.sina.weibo.sdk.api.TextObject;
-import com.sina.weibo.sdk.api.VideoObject;
-import com.sina.weibo.sdk.api.WebpageObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.api.share.BaseResponse;
 import com.sina.weibo.sdk.api.share.IWeiboHandler;
@@ -19,20 +16,16 @@ import com.sina.weibo.sdk.api.share.WeiboShareSDK;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
+import com.sina.weibo.sdk.auth.sso.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.constant.WBConstants;
 import com.sina.weibo.sdk.exception.WeiboException;
-import com.sina.weibo.sdk.utils.Utility;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.SSOHandler;
 import com.tsy.sdk.social.listener.AuthListener;
 import com.tsy.sdk.social.listener.ShareListener;
 import com.tsy.sdk.social.share_media.IShareMedia;
-import com.tsy.sdk.social.share_media.ShareImageMedia;
-import com.tsy.sdk.social.share_media.ShareMusicMedia;
-import com.tsy.sdk.social.share_media.ShareTextMedia;
-import com.tsy.sdk.social.share_media.ShareVideoMedia;
-import com.tsy.sdk.social.share_media.ShareWebMedia;
+import com.tsy.sdk.social.share_media.ShareTextImageMedia;
 import com.tsy.sdk.social.util.LogUtils;
 
 import java.util.HashMap;
@@ -127,73 +120,55 @@ public class SinaWBHandler extends SSOHandler {
 
         WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
 
-        if(shareMedia instanceof ShareWebMedia) {       //网页分享
-            ShareWebMedia shareWebMedia = (ShareWebMedia) shareMedia;
+        if(shareMedia instanceof ShareTextImageMedia) {       //文字图片分享
+            ShareTextImageMedia shareTextImageMedia = (ShareTextImageMedia) shareMedia;
 
-            WebpageObject mediaObject = new WebpageObject();
-            mediaObject.identify = Utility.generateGUID();
-            mediaObject.title = shareWebMedia.getTitle();
-            mediaObject.description = shareWebMedia.getDescription();
-            mediaObject.setThumbImage(shareWebMedia.getThumb());
-            mediaObject.actionUrl = shareWebMedia.getWebPageUrl();
+            if(shareTextImageMedia.getText().length() > 0) {
+                TextObject textObject = new TextObject();
+                textObject.text = shareTextImageMedia.getText();
+                weiboMessage.textObject = textObject;
+            }
 
-            weiboMessage.mediaObject = mediaObject;
-        } else if(shareMedia instanceof ShareTextMedia) {   //文字分享
-            ShareTextMedia shareTextMedia = (ShareTextMedia) shareMedia;
-
-            TextObject textObject = new TextObject();
-            textObject.text = shareTextMedia.getText();
-
-            weiboMessage.textObject = textObject;
-        } else if(shareMedia instanceof ShareImageMedia) {  //图片分享
-            ShareImageMedia shareImageMedia = (ShareImageMedia) shareMedia;
-
-            ImageObject imageObject = new ImageObject();
-            imageObject.setImageObject(shareImageMedia.getImage());
-
-            weiboMessage.imageObject = imageObject;
-        } else if (shareMedia instanceof ShareMusicMedia) {  //音乐分享
-            ShareMusicMedia shareMusicMedia = (ShareMusicMedia) shareMedia;
-
-            MusicObject musicObject = new MusicObject();
-            musicObject.identify = Utility.generateGUID();
-            musicObject.title = shareMusicMedia.getTitle();
-            musicObject.description = shareMusicMedia.getDescription();
-
-            musicObject.setThumbImage(shareMusicMedia.getThumb());
-            musicObject.actionUrl = shareMusicMedia.getMusicUrl();
-            musicObject.dataUrl = shareMusicMedia.getMusicUrl();
-            musicObject.dataHdUrl = shareMusicMedia.getMusicUrl();
-            musicObject.duration = 10;
-            musicObject.defaultText = "music 默认文案";
-
-            weiboMessage.mediaObject = musicObject;
-        } else if(shareMedia instanceof ShareVideoMedia) {      //视频分享
-            ShareVideoMedia shareVideoMedia = (ShareVideoMedia) shareMedia;
-
-            VideoObject videoObject = new VideoObject();
-            videoObject.identify = Utility.generateGUID();
-            videoObject.title = shareVideoMedia.getTitle();
-            videoObject.description = shareVideoMedia.getDescription();
-
-            videoObject.setThumbImage(shareVideoMedia.getThumb());
-            videoObject.actionUrl = shareVideoMedia.getVideoUrl();
-            videoObject.dataUrl = shareVideoMedia.getVideoUrl();
-            videoObject.dataHdUrl = shareVideoMedia.getVideoUrl();
-            videoObject.duration = 10;
-            videoObject.defaultText = "Vedio 默认文案";
-
-            weiboMessage.mediaObject = videoObject;
+            if(shareTextImageMedia.getImage() != null) {
+                ImageObject imageObject = new ImageObject();
+                imageObject.setImageObject(shareTextImageMedia.getImage());
+                weiboMessage.imageObject = imageObject;
+            }
         } else {
             if(this.mShareListener != null) {
-                this.mShareListener.onError(this.mConfig.getName(), "shareMedia error");
+                this.mShareListener.onError(this.mConfig.getName(), "weibo is not support this shareMedia");
             }
             return ;
         }
 
         SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
-        request.transaction = String.valueOf(System.currentTimeMillis()); request.multiMessage = weiboMessage;
-        mWeiboShareAPI.sendRequest(mActivity, request);
+        request.transaction = String.valueOf(System.currentTimeMillis());
+        request.multiMessage = weiboMessage;
+
+        Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(mContext.getApplicationContext());
+        String token = "";
+        if (accessToken != null) {
+            token = accessToken.getToken();
+        }
+        mWeiboShareAPI.sendRequest(mActivity, request, mAuthInfo, token, new WeiboAuthListener() {
+
+            @Override
+            public void onWeiboException( WeiboException arg0 ) {
+            }
+
+            @Override
+            public void onComplete( Bundle bundle ) {
+                // TODO Auto-generated method stub
+                Oauth2AccessToken newToken = Oauth2AccessToken.parseAccessToken(bundle);
+                AccessTokenKeeper.writeAccessToken(mContext.getApplicationContext(), newToken);
+            }
+
+            @Override
+            public void onCancel() {
+            }
+        });
+
+//        mWeiboShareAPI.sendRequest(mActivity, request);
     }
 
     @Override
