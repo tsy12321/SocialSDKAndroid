@@ -23,7 +23,6 @@
 - app/ Demo代码
 - social_sdk/ sdk的开发源码module 开发完成后用gradle中makejar打成jar包
 - social_sdk_vxxx.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
-- weixin_sdk/ 微信sdk
 - qq_sdk/ qq sdk
 
 ### 1.2 Demo介绍
@@ -241,7 +240,9 @@ shareMedia.setThumb(BitmapUtils.readBitMap(getApplicationContext(), R.mipmap.ic_
 
 #### 4.1.1 集成sdk
 
-将目录中的weixin_sdk_v3.1.1.jar放入项目.
+```
+compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:1.4.0'
+```
 
 #### 4.1.2 配置
 
@@ -295,7 +296,7 @@ WXHandler.setScopeState("your scope", "your state");
 
 #### 4.2.1 集成sdk
 
-将目录中的qq_mta-sdk-1.6.2.jar和qq_sdk_v3.1.0.jar放入项目.
+将目录中的qq_mta-sdk-1.6.2.jar和qq_sdk_v3.3.0_lite.jar放入项目.
 
 #### 4.2.2 配置
 
