@@ -5,20 +5,20 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
-import com.tencent.mm.sdk.constants.ConstantsAPI;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXImageObject;
-import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXMusicObject;
-import com.tencent.mm.sdk.modelmsg.WXTextObject;
-import com.tencent.mm.sdk.modelmsg.WXVideoObject;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXImageObject;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMusicObject;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tsy.sdk.social.PlatformConfig;
 import com.tsy.sdk.social.PlatformType;
 import com.tsy.sdk.social.SSOHandler;
@@ -157,7 +157,7 @@ public class WXHandler extends SSOHandler {
     @Override
     public void share(Activity activity, IShareMedia shareMedia, ShareListener shareListener) {
         if(!isInstall()) {
-            this.mAuthListener.onError(this.mConfig.getName(), "wx not install");
+            shareListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.e("wx not install");
             return ;
         }
@@ -259,7 +259,7 @@ public class WXHandler extends SSOHandler {
         }
     }
 
-    protected void onShareCallback(com.tencent.mm.sdk.modelmsg.SendMessageToWX.Resp resp) {
+    protected void onShareCallback(com.tencent.mm.opensdk.modelmsg.SendMessageToWX.Resp resp) {
         switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK:       //分享成功
                 if(this.mShareListener != null) {
