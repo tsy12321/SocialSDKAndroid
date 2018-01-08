@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
@@ -27,7 +28,9 @@ import com.tsy.sdk.social.util.Utils;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * QQ 第三方 Handler
@@ -98,8 +101,13 @@ public class QQHandler extends SSOHandler {
         this.mActivity = activity;
         this.mShareListener = shareListener;
 
-        String path = Environment.getExternalStorageDirectory().toString() + "/socail_qq_img_tmp.png";
-        File file = new File(path);
+        //获取当前时间
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMddHHmmss");
+        Date curDate =  new Date(System.currentTimeMillis());
+        String strDate = formatter.format(curDate);
+
+        final String path = Environment.getExternalStorageDirectory().toString() + "/socail_qq_img_tmp" + strDate + ".png";
+        final File file = new File(path);
         if(file.exists()) {
             file.delete();
         }
@@ -133,6 +141,10 @@ public class QQHandler extends SSOHandler {
                 @Override
                 public void onComplete(Object o) {
                     mShareListener.onComplete(mConfig.getName());
+
+                    if(file.exists()) {
+                        file.delete();
+                    }
                 }
 
                 @Override
@@ -140,11 +152,19 @@ public class QQHandler extends SSOHandler {
                     String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
                     LogUtils.e(errmsg);
                     mShareListener.onError(mConfig.getName(), errmsg);
+
+                    if(file.exists()) {
+                        file.delete();
+                    }
                 }
 
                 @Override
                 public void onCancel() {
                     mShareListener.onCancel(mConfig.getName());
+
+                    if(file.exists()) {
+                        file.delete();
+                    }
                 }
             });
         } else {        //分享到qq
@@ -191,6 +211,10 @@ public class QQHandler extends SSOHandler {
                 @Override
                 public void onComplete(Object o) {
                     mShareListener.onComplete(mConfig.getName());
+
+                    if(file.exists()) {
+                        file.delete();
+                    }
                 }
 
                 @Override
@@ -198,11 +222,19 @@ public class QQHandler extends SSOHandler {
                     String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
                     LogUtils.e(errmsg);
                     mShareListener.onError(mConfig.getName(), errmsg);
+
+                    if(file.exists()) {
+                        file.delete();
+                    }
                 }
 
                 @Override
                 public void onCancel() {
                     mShareListener.onCancel(mConfig.getName());
+
+                    if(file.exists()) {
+                        file.delete();
+                    }
                 }
             });
         }
