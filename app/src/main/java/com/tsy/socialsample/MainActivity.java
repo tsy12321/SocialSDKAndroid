@@ -1,5 +1,6 @@
 package com.tsy.socialsample;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,14 +25,17 @@ import com.tsy.sdk.social.share_media.ShareVideoMedia;
 import com.tsy.sdk.social.share_media.ShareWebMedia;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
+    private static final int REQUEST_LOCATION = 1;
     @BindView(R.id.radioGShareMedia)
     RadioGroup radioGShareMedia;
 
@@ -79,6 +83,36 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btnSinaWBLogin)
     public void onSinaWBLogin() {
         mSocialApi.doOauthVerify(this, PlatformType.SINA_WB, new MyAuthListener());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //申请权限
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (!EasyPermissions.hasPermissions(this, perms)) {
+            EasyPermissions.requestPermissions(this, "need access external storage", REQUEST_LOCATION, perms);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            Toast.makeText(getApplicationContext(), "前往设置开启访问存储空间权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     public class MyAuthListener implements AuthListener {

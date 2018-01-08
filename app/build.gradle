@@ -49,6 +49,7 @@ dependencies {
     //ButterKnife
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    compile 'pub.devrel:easypermissions:1.0.1'
 
 //    compile project(':social_sdk')
     //social sdk
