@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 24
@@ -46,3 +48,47 @@ task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
 
 makeJar.dependsOn(clearJar, build)
 
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+publish {
+    userOrg = 'tangsiyuan'
+    groupId = 'com.tsy.social_sdk'
+    artifactId = 'social_sdk'
+    publishVersion = '1.8.0'
+    desc = '对微信、QQ、微博第三方分享登录的封装'
+    website = 'https://github.com/tsy12321/SocialSDKAndroid'
+
+//    publishing {
+//        publications {
+////            maven(MavenPublication) {
+////                groupId project.publish.groupId
+////                artifactId project.publish.artifactId
+////                version project.publish.version
+////
+////                artifacts.all(project).each {
+////                    delegate.artifact it
+////                }
+////
+////                from artifacts.from(project)
+////            }
+//
+//            fooPublication(MavenPublication) {
+//                groupId project.publish.groupId
+//                artifactId project.publish.artifactId
+//                publishVersion project.publish.publishVersion
+//
+//                Artifacts artifacts = new JavaArtifacts()
+////                artifacts.all(it.name, project).each {
+////                    delegate.artifact it
+////                }
+////                from artifacts.from(project)
+//            }
+//        }
+//    }
+//
+//    publications = ['fooPublication']
+}
