@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'com.novoda.bintray-release'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
@@ -56,11 +59,15 @@ tasks.withType(Javadoc) {
 
 publish {
     userOrg = 'tangsiyuan'
-    groupId = 'com.tsy.social_sdk'
-    artifactId = 'social_sdk'
+    groupId = 'com.tsy.social'
+    artifactId = 'social-sdk-full'
     publishVersion = '1.8.0'
     desc = '对微信、QQ、微博第三方分享登录的封装'
     website = 'https://github.com/tsy12321/SocialSDKAndroid'
+    dryRun = false
+    bintrayUser = properties.getProperty('bintrayUser');
+    bintrayKey = properties.getProperty('bintrayKey');
+
 
 //    publishing {
 //        publications {
