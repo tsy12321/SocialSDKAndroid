@@ -15,7 +15,7 @@
 
 ## 1 引用
 
-### 三个平台包全部包含的Library
+### 第一种方式：三个平台包全部包含的Library
 
 在项目的 `build-gradle` 中添加
 
@@ -25,7 +25,7 @@ dependencies {
 }
 ```
 
-### 引入核心包，然后自由选择需要的平台SDK
+### 第二种方式：引入核心包，然后自由选择需要的平台SDK
 
 ```groovy
 dependencies {
