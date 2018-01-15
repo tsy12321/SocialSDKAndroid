@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+## Version 2.0.0
+
+_2018-01-15_
+
+ * 将Library上传至JCenter，并分别上传 full 和 core 版本
+
 ## Version 1.8.0
 
 _2018-01-08_

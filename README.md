@@ -13,16 +13,42 @@
 
 [版本更新记录](https://github.com/tsy12321/SocialSDKAndroid/blob/master/CHANGELOG.md)
 
-## 1 总体概述
+## 1 引用
 
-采用了jar包的方式封装sdk,需要使用时可以引入social_sdk.jar再搭配需要的平台sdk使用.
+### 三个平台包全部包含的Library
+
+在项目的 `build-gradle` 中添加
+
+```groovy
+dependencies {
+    compile 'com.tsy.social:social-sdk-full:2.0.0'
+}
+```
+
+### 引入核心包，然后自由选择需要的平台SDK
+
+```groovy
+dependencies {
+    compile 'com.tsy.social:social-sdk-core:2.0.0'
+    //social sdk 自由选择
+    //微信sdk
+//    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:1.4.0' 
+    //QQ SDK
+//    compile files('libs/qq_mta-sdk-1.6.2.jar')
+//    compile files('libs/qq_sdk_v3.3.0_lite.jar')
+    //微博SDK
+//    compile 'com.sina.weibo.sdk:core:1.0.0:openDefaultRelease@aar'
+}
+```
+
 这种方式可以减少sdk的体积,需要什么平台就引入哪个平台.更为合理.
+
+**注意：该方式在sync时可能会报引用错误（如果没有使用微博的SDK），可以忽略**
 
 ### 1.1 目录介绍
 
 - app/ Demo代码
 - social_sdk/ sdk的开发源码module 开发完成后用gradle中makejar打成jar包
-- social_sdk_vxxx.jar sdk的jar包 直接使用.搭配所需的平台sdk包.
 - qq_sdk/ qq sdk
 
 ### 1.2 Demo介绍
