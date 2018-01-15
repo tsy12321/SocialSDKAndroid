@@ -51,12 +51,13 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
     compile 'pub.devrel:easypermissions:1.0.1'
 
+    compile 'com.tsy.social:social-sdk-full:2.0.0'
+//    compile 'com.tsy.social:social-sdk-core:2.0.0'
 //    compile project(':social_sdk')
     //social sdk
-    compile files('libs/social_sdk_v1.8.0.jar')
-    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:1.4.0'
-    compile files('libs/qq_mta-sdk-1.6.2.jar')
-    compile files('libs/qq_sdk_v3.3.0_lite.jar')
-    compile 'com.sina.weibo.sdk:core:1.0.0:openDefaultRelease@aar'
+//    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:1.4.0'
+//    compile files('libs/qq_mta-sdk-1.6.2.jar')
+//    compile files('libs/qq_sdk_v3.3.0_lite.jar')
+//    compile 'com.sina.weibo.sdk:core:1.0.0:openDefaultRelease@aar'
 }
 

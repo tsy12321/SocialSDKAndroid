@@ -32,25 +32,6 @@ dependencies {
     compile 'com.sina.weibo.sdk:core:1.0.0:openDefaultRelease@aar'
 }
 
-task clearJar(type: Delete) {
-    delete 'build/libs/social_sdk.jar'
-}
-
-task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
-    //指定生成的jar名
-    baseName 'social_sdk'
-    //从哪里打包class文件
-    from('build/intermediates/classes/release/com/tsy/sdk/social/')
-    //打包到jar后的目录结构
-    into('com/tsy/sdk/social/')
-    //去掉不需要打包的目录和文件
-    exclude('test/', 'BuildConfig.class', 'R.class')
-    //去掉R$开头的文件
-    exclude{ it.name.startsWith('R$');}
-}
-
-makeJar.dependsOn(clearJar, build)
-
 tasks.withType(Javadoc) {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.addStringOption('encoding', 'UTF-8')
@@ -61,41 +42,10 @@ publish {
     userOrg = 'tangsiyuan'
     groupId = 'com.tsy.social'
     artifactId = 'social-sdk-full'
-    publishVersion = '1.8.0'
+    publishVersion = '2.0.0'
     desc = '对微信、QQ、微博第三方分享登录的封装'
     website = 'https://github.com/tsy12321/SocialSDKAndroid'
     dryRun = false
     bintrayUser = properties.getProperty('bintrayUser');
     bintrayKey = properties.getProperty('bintrayKey');
-
-
-//    publishing {
-//        publications {
-////            maven(MavenPublication) {
-////                groupId project.publish.groupId
-////                artifactId project.publish.artifactId
-////                version project.publish.version
-////
-////                artifacts.all(project).each {
-////                    delegate.artifact it
-////                }
-////
-////                from artifacts.from(project)
-////            }
-//
-//            fooPublication(MavenPublication) {
-//                groupId project.publish.groupId
-//                artifactId project.publish.artifactId
-//                publishVersion project.publish.publishVersion
-//
-//                Artifacts artifacts = new JavaArtifacts()
-////                artifacts.all(it.name, project).each {
-////                    delegate.artifact it
-////                }
-////                from artifacts.from(project)
-//            }
-//        }
-//    }
-//
-//    publications = ['fooPublication']
 }
