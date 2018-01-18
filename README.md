@@ -108,7 +108,9 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
 
 替换builde.gradle文件中的签名为自己的app签名。
 
-修改完上面3个地方后即可跑通Demo。如下
+修改 `build.gradle` 中的 `applicationID` 和 项目的 `PackageName` （右键IDE的项目树，修改包名）
+
+修改完上面4个地方后即可跑通Demo。如下
 
 ![Demo](https://github.com/tsy12321/SocialSDKAndroid/blob/master/Demo.jpg)
 
@@ -151,8 +153,6 @@ SDK中封装了部分API，比如当第三方授权成功后获取到access_toke
 
 ### 3.1 准备
 
-将social_sdk.jar和需要的平台sdk放入项目中引用.
-
 AndroidManifest加上以下基本的权限(之后各个平台会注册一些不同的信息后面会说明)
 
 ```xml
@@ -175,7 +175,7 @@ PlatformConfig.setSinaWB(SINA_WB_APPKEY);
 
 ### 3.3 接口使用说明
 
-调用方式使用api调用登录或者分享接口,在参数中区别平台,实现回调接收成功 取消或者失败的结果.
+调用方式使用api调用登录或者分享接口,在参数中区别平台,实现回调接收成功、取消或者失败的结果.
 
 示例如下:(某些平台会有一些特殊处理后面会在平台中说明)
 
