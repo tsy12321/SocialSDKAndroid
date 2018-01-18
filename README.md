@@ -37,7 +37,7 @@ dependencies {
 
 ### 第二种方式：引入核心包，然后自由选择需要的平台SDK
 
-在项目的 `build-gradle` 中添加
+在app级别的 `build-gradle` 中添加
 
 ```groovy
 dependencies {
