@@ -17,7 +17,17 @@
 
 ### 第一种方式：三个平台包全部包含的Library
 
-在项目的 `build-gradle` 中添加
+在项目级别的 `build-gradle` 中添加
+
+```groovy
+allprojects {
+    repositories {
+        maven { url "https://dl.bintray.com/thelasterstar/maven" }      //微博sdk maven库
+    }
+}
+```
+
+在app级别的 `build-gradle` 中添加
 
 ```groovy
 dependencies {
@@ -43,6 +53,15 @@ dependencies {
 }
 ```
 
+如果使用了微博SDK，需要在项目级别的 `build-gradle` 中添加
+
+```groovy
+allprojects {
+    repositories {
+        maven { url "https://dl.bintray.com/thelasterstar/maven" }      //微博sdk maven库
+    }
+}
+```
 这种方式可以减少sdk的体积,需要什么平台就引入哪个平台.更为合理.
 
 **注意：该方式在sync时可能会报引用错误（如果没有使用微博的SDK），可以忽略**
